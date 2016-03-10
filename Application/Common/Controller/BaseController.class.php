@@ -25,7 +25,6 @@ class BaseController extends Controller
     protected function _initialize()
     {
         $userService = new UserModel();
-        file_put_contents('data.json', json_encode(__INFO__), FILE_APPEND);
         if (!self::isIgnoreUrl(__INFO__) && !$userService->isLogin()) {
             $this->redirect(self::$loginPage);
         }
