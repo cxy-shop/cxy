@@ -1,10 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<literal>
+    <script src="/Public/3rd/jquery/2.2.0/jquery.min.js"></script>
+    <script src="/Public/3rd/layer/1.9.3/layer.min.js"></script>
+    <script>
+        $(function () {
+//        主内容JQ对象
+            var $main = $('#main');
 
+//        菜单效果 start
+            $(".side >ul >li >a").on('click', function () {
+                var that = $(this);
+                //修改兄弟节点的三角图标向右
+                that.parent().siblings().find('.side-right i').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right')
+                        .end().end().end()
+                        //修改当前节点三角图标向下
+                        .find('.side-right i').toggleClass('glyphicon-triangle-right').toggleClass('glyphicon-triangle-bottom');
+
+                //让兄弟节点展开菜单收缩
+                that.parent().siblings().find('ul').slideUp()
+                        .end().end().end()
+                        //让当前节点展开菜单下拉
+                        .next('ul').slideToggle();
+            });
+            $(".side >ul >li > ul a").on('click', function () {
+                $(".side >ul >li > ul a").removeClass('active');
+                $(this).toggleClass('active');
+            });
+//        菜单效果 end
+
+//        主内容路由 start
+            $(".frame").on('click', 'a.state', function () {
+                var that = $(this);
+                var url = that.attr('href');
+                $main.load(url);
+                return false;
+            });
+//        主内容路由 end
+        });
+    </script>
+</literal>
 </body>
 </html>

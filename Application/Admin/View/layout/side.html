@@ -1,0 +1,17 @@
+<div class="side">
+    <ul>
+        <foreach name="menuStructure" item="menu">
+        <li>
+            <a href="javascript:;"><span class="pull-left side-left"><i class="{$menu['iconClass']}"></i></span>
+                <span class="side-title">{$menu['title']}</span> <span class="side-right pull-right"><i
+                        class="glyphicon glyphicon-triangle-right"></i></span> </a>
+            <ul>
+                <foreach name="menu['items']" item="vo">
+                <li><a href="{$vo['url']}" class="state">{$vo['title']}</a></li>
+                </foreach>
+            </ul>
+        </li>
+        </foreach>
+    </ul>
+</div>
+
