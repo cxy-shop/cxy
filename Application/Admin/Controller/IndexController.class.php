@@ -10,4 +10,11 @@ class IndexController extends BaseController {
         $this->assign('userList', $userList);
         $this->display();
     }
+
+    public function test(){
+        $this->display();
+    }
+    public function test2(){
+        $this->display();
+    }
 }
