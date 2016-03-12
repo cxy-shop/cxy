@@ -1,6 +1,7 @@
 <?php
 namespace Admin\Controller;
 
+use Admin\Model\PayModeModel;
 use Common\Controller\BaseController;
 
 class PayModeController extends BaseController
@@ -9,6 +10,26 @@ class PayModeController extends BaseController
      * 支付方式管理主界面
      */
     public function index()
+    {
+        $this->display();
+    }
+
+    /**
+     * 分页获取支付方式列表
+     */
+    public function getPayList(){
+        $payModeService = new PayModeModel();
+        $payList = $payModeService->page(1,10)->select();
+        $total = $payModeService->count();
+        $this->ajaxData([
+            'data'  =>  $payList,
+            'total' => $total
+        ]);
+    }
+    /**
+     * 单项页面
+     */
+    public function item()
     {
         $this->display();
     }
@@ -26,7 +47,7 @@ class PayModeController extends BaseController
      */
     public function addHandle()
     {
-        $this->display();
+
     }
 
     /**
@@ -42,7 +63,7 @@ class PayModeController extends BaseController
      */
     public function editHandle()
     {
-        $this->display();
+
     }
 
     /**
@@ -58,6 +79,8 @@ class PayModeController extends BaseController
      */
     public function removeHandle()
     {
-        $this->display();
+        $id = I('id');
+
+        $this->ajaxSuccess();
     }
 }
