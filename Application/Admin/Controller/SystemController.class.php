@@ -5,9 +5,16 @@ use Admin\Model\UserModel;
 use Common\Controller\BaseController;
 
 class SystemController extends BaseController {
+    /**
+     * 登录页面
+     */
     public function login(){
         $this->display();
     }
+
+    /**
+     * 登录验证
+     */
     public function loginValidate(){
         $username = I('username');
         $password = I('password');
@@ -22,9 +29,12 @@ class SystemController extends BaseController {
         }
     }
 
+    /**
+     * 注销登录
+     */
     public function logout(){
         $userService = new UserModel();
-        $userService->destroy();
+        $userService->destroyUser();
         $this->redirect(self::$loginPage);
     }
 }

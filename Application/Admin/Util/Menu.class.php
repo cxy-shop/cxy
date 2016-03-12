@@ -1,5 +1,9 @@
 <?php
 namespace Admin\Util;
+/**
+ * 导航菜单工具类
+ * @package Admin\Util
+ */
 class Menu
 {
     public static $menuStructure = [
@@ -9,15 +13,35 @@ class Menu
             'items' => [
                 [
                     'title' => '商品管理',
-                    'url' => '/admin/product/list'
+                    'url' => '/admin/product/index'
                 ],
                 [
                     'title' => '商品分类管理',
-                    'url' => '/admin/poductCate/list'
+                    'url' => '/admin/poductCate/index'
+                ],
+                [
+                    'title' => '商品属性管理',
+                    'ur;' => '/admin/productAttr/index'
                 ],
                 [
                     'title' => '商品单位管理',
-                    'url' => 'admin/productUnit/list'
+                    'url' => '/admin/productUnit/index'
+                ],
+                [
+                    'title' => '品牌管理',
+                    'url' => '/admin/brand/index'
+                ],
+                [
+                    'title' => '货架管理',
+                    'url' => '/admin/shelf/index'
+                ],
+                [
+                    'title' => '支付方式管理',
+                    'url' => '/admin/payMode/index'
+                ],
+                [
+                    'title' => '地理信息管理',
+                    'url' => '/admin/geography/index'
                 ]
             ]
         ],
@@ -32,14 +56,21 @@ class Menu
                 [
                     'title' => '导航管理',
                     'url' => ''
+                ],
+                [
+                    'title' => '板块管理',
+                    'url' => ''
                 ]
             ]
         ],
         [
-            'title' => '组织架构',
+            'title' => '网站会员',
             'iconClass' => 'glyphicon glyphicon-user',
             'items' => [
-
+                [
+                    'title' => '会员管理',
+                    'url' => ''
+                ]
             ]
         ],
         [

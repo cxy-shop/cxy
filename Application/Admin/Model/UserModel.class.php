@@ -51,7 +51,7 @@ class UserModel extends Model{
         $this->setUser($this->user);
     }
 
-    public function destroy(){
+    public function destroyUser(){
         session('user', null);
         session(null);
     }
