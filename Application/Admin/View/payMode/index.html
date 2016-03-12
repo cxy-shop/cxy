@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .wrap {
+            padding: 0px 10px;
+        }
+
+        .nav {
+            width: 100%;
+        }
+
+        .nav-top {
+            display: block;
+            position: relative;
+        }
+
+        .nav-top > .breadcrumb {
+            float: right;
+            background: transparent;
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 12px;
+            padding: 7px 5px;
+            position: absolute;
+            top: 0px;
+            right: 10px;
+            border-radius: 2px;
+        }
+
+        .nav-content {
+            clear: both;
+        }
+
+        .body {
+            width: 100%;
+            position: relative;
+            margin-top: -15px;
+        }
+
+        #searchBtn {
+            width: 200px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="nav">
+        <div class="nav-top">
+
+            <h3>支付方式管理
+                <small>payment mode manage</small>
+            </h3>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="glyphicon glyphicon-home"></i> 公司模块</a></li>
+                <li class="active">部门管理</li>
+            </ol>
+
+        </div>
+        <div class="nav-content">
+            <div id="infoPanel" class="panel panel-default">
+                <div class="panel-heading">
+                    <a class="state btn btn-default add" role="button" href="/admin/department/addPage" param="id=12"><i
+                            class="glyphicon glyphicon-plus"></i>新增支付方式</a>
+            <span class="btn-nav">
+                <button id="advancedSearch" class="btn btn-default pull-right" type="button" data-toggle="tooltip"
+                        data-placement="left" title="" data-original-title="展开高级搜索"><i
+                        class="glyphicon glyphicon-menu-hamburger"></i></button>
+                <input type="text" id="searchBtn" class="form-control pull-right" placeholder="部门名称/负责人">
+            </span>
+
+                </div>
+                <div class="panel-body" style="display: none;">
+                    搜索面板
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="body">
+
+        <div id="grid" ></div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var sharableDataSource = new kendo.data.DataSource({
+            transport: {
+                read: {
+                    'url': "getData",
+                    'dataType': 'json',
+                    'type': 'get'
+                }
+            },
+            filter: {
+                field: "Name", value: '123'
+            },
+            schema: {
+                data: function (response) {
+                    return response.data;
+                },
+                total: function (response) {
+                    return response.total;
+                }
+            },
+            pageSize: 5,
+            serverPaging: true,
+            serverSorting: true,
+            serverFiltering: true
+        });
+
+        var grid = $("#grid").kendoGrid({
+            dataSource: sharableDataSource,
+            height: 550,
+            sortable: true,
+            pageable: {
+                refresh: true,
+                pageSizes: true,
+                buttonCount: 5
+            },
+            columns: [{
+                template: "#: name #",
+                field: "name",
+                title: "姓名",
+                width: 240
+            }, {
+                field: "age",
+                title: "年龄"
+            }]
+        });
+
+        $("#button").click(function () {
+            grid.data("kendoGrid").dataSource.filter([
+                {field: "Name", value: name},
+                {field: "Age", value: 123}
+            ]);
+        });
+
+    });
+
+</script>
+</body>
+</html>
