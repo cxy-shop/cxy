@@ -15,76 +15,15 @@ class IndexController extends BaseController {
     }
 
     public function getData(){
-        $data = [
-            [
-                'name'  =>  'lisi',
-                'age'   =>  21
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  2222
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  22222
-            ],
-            [
-                'name'  =>  'zhangsan',
-                'age'   =>  2222
-            ]
-        ];
+        $data = [];
+        for($i = 0; $i < 10; $i++){
+            $data[] = [
+                'id'    =>  $i,
+                'name'  =>  'lisi'.$i,
+                'age'   =>  20+$i
+            ];
+        }
+
         $this->ajaxReturn([
             'data'  =>  $data,
             'total' => count($data)

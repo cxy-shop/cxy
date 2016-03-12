@@ -29,10 +29,48 @@
             $(".frame").on('click', 'a.state', function () {
                 var that = $(this);
                 var url = that.attr('href');
-                $main.load(url);
+                var params = that.attr('params');
+                if (params) {
+                    $main.load(url + '?' + params);
+                } else {
+                    $main.load(url);
+                }
                 return false;
             });
 //        主内容路由 end
+            var login = true;
+//            注销登录 start
+            $("#btnLogout").on('click', function () {
+                var that = $(this);
+                layer.confirm('是否退出系统?', {icon: 3, title: '提示'}, function (index) {
+                    //ok=1没意义,但是不给参数异步会出问题
+                    $.post('' + that.attr('href'), 'ok=1', function (obj) {
+                        if (obj.success == 1) {
+                            login = false;
+                            layer.msg(obj.msg);
+                            setTimeout(function () {
+                                location.href = obj.data.url;
+                            }, 500);
+                        } else {
+                            layer.msg('注销失败');
+                        }
+                    });
+                    layer.close(index);
+                });
+                return false;
+            });
+//            注销登录 end
+
+//            离开系统提醒是否离开 start
+            $(window).bind('beforeunload', function () {
+                if (login){
+                    return '您确定要离开系统吗?';
+                }else{
+                    return;
+                }
+
+            });
+//            离开系统提醒是否离开 end
         });
     </script>
 </literal>

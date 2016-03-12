@@ -39,11 +39,20 @@
             position: relative;
             margin-top: -15px;
         }
-
+        .pay-logo{
+            max-width:200px;
+            max-height:40px;
+        }
         #searchBtn {
             width: 200px;
         }
 
+        #itemZone {
+            display: none;
+        }
+        .item{
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -55,21 +64,31 @@
                 <small>payment mode manage</small>
             </h3>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="glyphicon glyphicon-home"></i> 公司模块</a></li>
-                <li class="active">部门管理</li>
+                <li><a href="#"><i class="glyphicon glyphicon-home"></i> 基础模块</a></li>
+                <li class="active">支付方式管理</li>
             </ol>
 
         </div>
         <div class="nav-content">
             <div id="infoPanel" class="panel panel-default">
                 <div class="panel-heading">
-                    <a class="state btn btn-default add" role="button" href="/admin/department/addPage" param="id=12"><i
-                            class="glyphicon glyphicon-plus"></i>新增支付方式</a>
+                    <a class="state btn btn-default add" role="button" href="/admin/payMode/add"><i
+                            class="glyphicon glyphicon-plus"></i>新增</a>
+                    <span id="itemZone">
+                        <a class="state btn btn-default edit" role="button" href="/admin/payMode/edit"><i
+                                class="glyphicon glyphicon-pencil"></i>编辑</a>
+                        <a class="btn btn-default remove" role="button" href="/admin/payMode/removeHandle"><i
+                                class="glyphicon glyphicon-remove"></i>删除</a>
+                    </span>
+                    <a class="state btn btn-default item" role="button" href="/admin/payMode/item"><i
+                            class="glyphicon glyphicon-plus"></i>查看</a>
             <span class="btn-nav">
                 <button id="advancedSearch" class="btn btn-default pull-right" type="button" data-toggle="tooltip"
                         data-placement="left" title="" data-original-title="展开高级搜索"><i
                         class="glyphicon glyphicon-menu-hamburger"></i></button>
-                <input type="text" id="searchBtn" class="form-control pull-right" placeholder="部门名称/负责人">
+                <input type="text" id="searchBtn" class="form-control pull-right" placeholder="支付名称">
+                 <a class="state btn btn-default trash pull-right" role="button" href="/admin/payMode/trash"><i
+                         class="glyphicon glyphicon-trash"></i>回收站</a>
             </span>
 
                 </div>
@@ -81,7 +100,7 @@
     </div>
     <div class="body">
 
-        <div id="grid" ></div>
+        <div id="grid"></div>
     </div>
 </div>
 <script>
@@ -89,7 +108,7 @@
         var sharableDataSource = new kendo.data.DataSource({
             transport: {
                 read: {
-                    'url': "getData",
+                    'url': "/admin/payMode/getPayList",
                     'dataType': 'json',
                     'type': 'get'
                 }
@@ -113,6 +132,7 @@
 
         var grid = $("#grid").kendoGrid({
             dataSource: sharableDataSource,
+            selectable: "row",
             height: 550,
             sortable: true,
             pageable: {
@@ -121,22 +141,71 @@
                 buttonCount: 5
             },
             columns: [{
+                field: "id",
+                hidden: true
+            }, {
                 template: "#: name #",
                 field: "name",
-                title: "姓名",
+                title: "支付名称",
                 width: 240
             }, {
-                field: "age",
-                title: "年龄"
+                template: "<img class='pay-logo' src='#:logo_path#'>",
+                field: "logo_path",
+                title: "logo"
+            }, {
+                field: "remark",
+                title: "描述"
             }]
+        }).data("kendoGrid");
+//        传递参数
+        var params = '';
+//        表格行被单击,显示编辑和删除,并设置主键
+        $("#grid").on('click', 'tr', function () {
+            $("#itemZone").show();
+            var item = grid.dataItem($(this));
+            params = 'id=' + item.id;
+//           设置新增和编辑页面的传递参数
+            $(".add").attr('params', params);
+            $(".edit").attr('params', params);
         });
+//        表格行被双击,显示详细页面
+        $("#grid").on('dblclick', 'tr', function () {
+            var item = $(".item");
+            $.get(item.attr('href'), function (html) {
+                layer.open({
+                    area:  ['auto', '500px'],
+                    type: 1,
+                    content: html
+                });
+            });
+        });
+//        删除功能
+        $(".remove").on('click', function () {
+            var that = $(this);
+            layer.confirm('是否删除?', {icon: 3, title: '提示'}, function (index) {
 
-        $("#button").click(function () {
-            grid.data("kendoGrid").dataSource.filter([
-                {field: "Name", value: name},
-                {field: "Age", value: 123}
-            ]);
+                $.post(that.attr('href'), params, function (obj) {
+                    layer.msg(obj.msg);
+                });
+                //TODO 更新grid
+
+                layer.close(index);
+            });
+            return false;
         });
+        //搜索功能
+//        timer = null;
+//        $("#searchBtn").keyup(function () {
+//            timer || clearTimeout(timer);
+//            timer = setTimeout(function () {
+//                clearTimeout(timer);
+//                grid.data("kendoGrid").dataSource.filter([
+//                    {field: "Name", value: name},
+//                    {field: "Age", value: 123}
+//                ]);
+//            }, 500);
+//
+//        });
 
     });
 

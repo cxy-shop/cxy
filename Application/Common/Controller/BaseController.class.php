@@ -11,7 +11,8 @@ class BaseController extends Controller
     //不需要登录验证的URL
     public static $ignoreUrl = [
         'admin/system/login',
-        'admin/system/loginvalidate'
+        'admin/system/loginvalidate',
+        'admin/system/logouthandle'
     ];
 
     public static function isIgnoreUrl($url)
@@ -20,13 +21,18 @@ class BaseController extends Controller
     }
 
     /**
-     *
+     *权限检测
      */
     protected function _initialize()
     {
         $userService = new UserModel();
         if (!self::isIgnoreUrl(__INFO__) && !$userService->isLogin()) {
-            $this->redirect(self::$loginPage);
+            if (IS_AJAX){
+                $this->ajaxError('没有权限!');
+            }else{
+                $this->redirect(self::$loginPage);
+            }
+            die;
         }
     }
 
@@ -35,13 +41,14 @@ class BaseController extends Controller
      * @param string $msg
      * @param $data
      */
-    public function ajaxSuccess($msg = '操作成功', $data)
+    public function ajaxSuccess($msg = '操作成功', $data=[])
     {
         $this->ajaxReturn([
             'success' => 1,
             'msg' => $msg,
             'data' => $data
         ]);
+        die;
     }
 
     /**
@@ -54,6 +61,18 @@ class BaseController extends Controller
             'success' => 0,
             'msg' => $msg
         ]);
+        die;
     }
+
+    /**
+     * 返回json数据
+     * @param array $data
+     */
+    public function ajaxData($data = [])
+    {
+        $this->ajaxReturn($data);
+        die;
+    }
+
 
 }
