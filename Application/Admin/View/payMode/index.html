@@ -79,14 +79,14 @@
                               <i class="glyphicon glyphicon-th-list"></i><span>列表</span>
                           </a>
                           <a class="state btn btn-default a-add" role="button" href="/admin/payMode/add"
-                             context="#a-form" breadcrumb="新增">
+                             context="#a-add-form" breadcrumb="新增">
                               <i class="glyphicon glyphicon-plus"></i><span>新增</span>
                           </a>
                     </span>
 
                     <span class="a-item-tool-btns">
                         <a class="state btn btn-default a-edit" role="button" href="/admin/payMode/edit"
-                           context="#a-form" breadcrumb="编辑">
+                           context="#a-edit-form" breadcrumb="编辑">
                             <i class="glyphicon glyphicon-pencil"></i><span>编辑</span>
                         </a>
                         <a class="btn btn-default a-remove" role="button" href="/admin/payMode/removeHandle">
@@ -119,7 +119,8 @@
     </div>
     <div class="a-body">
         <div id="a-grid"></div>
-        <div id="a-form"></div>
+        <div id="a-add-form"></div>
+        <div id="a-edit-form"></div>
     </div>
 </div>
 <script>
@@ -170,8 +171,8 @@
                 sortable: false,
 //                filterable : false,
 //                columns : false,
-                width: 60
-//                hidden: true
+                width: 60,
+                hidden: true
             }, {
                 template: "#: name #",
                 field: "name",
@@ -201,6 +202,7 @@
 
         $("#a-grid").on('click', 'tr', function () {
             var that = $(this);
+            //选择了一行才显示项工具按钮组
             var res = that.hasClass('k-state-selected');
             if(res){
                 $(".a-item-tool-btns").show();
@@ -223,59 +225,70 @@
             });
         });
 
-
         //搜索功能
         $(".panel-heading").on('click', '#a-searchInput', function () {
-
+            var that = $(this);
             //隐藏指定项工具按钮
             $(".a-item-tool-btns").hide();
             sharableDataSource.query({
-                search: 'search'
+                search: that.val()
             });
         });
+
         //视图切换
         function viewSwitch(view){
+            //先隐藏所有视图
+            $('.a-body > div').hide();
+
             $("#a-grid tr").removeClass('k-state-selected');
             //clean 传递参数
             $('.a-edit').attr('params', '');
             $('.a-remove').attr('params', '');
             if (view == 'grid'){
-                $("#a-form").hide();
                 $("#a-grid").show();
-            }else if(view == 'form'){
-                $("#a-grid").hide();
-                $("#a-form").show();
+            }else if(view == 'add'){
+                $("#a-add-form").show();
+            }else if(view == 'edit'){
+                $("#a-edit-form").show();
             }
         }
+
 //        列表
         $(".panel-heading").on('click', '.a-list', function () {
+            //隐藏指定项工具按钮
+            $(".a-item-tool-btns").hide();
             viewSwitch('grid');
             sharableDataSource.query({
                 filter: {
                     field: "isDel", value: '0'
                 }
             });
-            //隐藏指定项工具按钮
-            $(".a-item-tool-btns").hide();
         });
+
         //add
         $(".panel-heading").on('click', '.a-add', function () {
-            viewSwitch('form');
+            //隐藏指定项工具按钮
+            $(".a-item-tool-btns").hide();
+            viewSwitch('add');
         });
+
         //edit
         $(".panel-heading").on('click', '.a-edit', function () {
+            //TODO 需要批量编辑
             //判断是否选中了一行
             var $tr = $("#a-grid tr.k-state-selected").eq(0);
             var item = grid.dataItem($tr);
             if (item){
                 $(this).attr('params', 'id='+item.id);
-                viewSwitch('form');
+                viewSwitch('edit');
             }else{
                 layer.msg('你需要选择一项!');
             }
         });
+
         //remove
         $(".panel-heading").on('click', '.a-remove', function () {
+            //TODO 需要批量删除
             var that = $(this);
             var $tr = $("#a-grid tr.k-state-selected").eq(0);
             var item = grid.dataItem($tr);
@@ -283,7 +296,6 @@
                 layer.confirm('是否删除?', {icon: 3, title: '提示'}, function (index) {
 
                     $.post(that.attr('href'), 'id='+item.id, function (obj) {
-
                         if(obj.success == 1){
                             sharableDataSource.read();
                         }else{
@@ -297,8 +309,11 @@
             }
             return false;
         });
+
         //回收站
         $(".panel-heading").on('click', '.a-trash', function () {
+            //隐藏指定项工具按钮
+            $(".a-item-tool-btns").hide();
             viewSwitch('grid');
             sharableDataSource.query({
                 filter: {

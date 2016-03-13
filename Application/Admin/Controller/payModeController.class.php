@@ -17,15 +17,21 @@ class PayModeController extends BaseController
     /**
      * 分页获取支付方式列表
      */
-    public function getPayList(){
+    public function getPayList()
+    {
         $payModeService = new PayModeModel();
-        $payList = $payModeService->page(1,10)->select();
+        $payList = $payModeService->page(1, 10)->select();
         $total = $payModeService->count();
+        $data = [];
+        for($i = 0;$i <10;$i++){
+            $data[] = $payList[0];
+        }
         $this->ajaxData([
-            'data'  =>  $payList,
-            'total' => $total
+            'data' => $data,
+            'total' => 20
         ]);
     }
+
     /**
      * 单项页面
      */
