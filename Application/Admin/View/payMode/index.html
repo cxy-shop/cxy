@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <style>
-        .wrap {
+        .a-wrap {
             padding: 0px 10px;
         }
 
-        .nav {
+        .a-nav {
             width: 100%;
         }
 
-        .nav-top {
+        .a-nav-top {
             display: block;
             position: relative;
         }
 
-        .nav-top > .breadcrumb {
+        .a-nav-top > .breadcrumb {
             float: right;
             background: transparent;
             margin-top: 0;
@@ -30,66 +30,85 @@
             border-radius: 2px;
         }
 
-        .nav-content {
+        .a-nav-content {
             clear: both;
         }
 
-        .body {
+        .a-body {
             width: 100%;
             position: relative;
             margin-top: -15px;
         }
-        .pay-logo{
-            max-width:200px;
-            max-height:40px;
+
+        .a-pay-logo {
+            max-width: 200px;
+            max-height: 40px;
         }
-        #searchBtn {
+
+        #a-searchInput {
             width: 200px;
         }
 
-        #itemZone {
+        .a-item-tool-btns {
             display: none;
         }
-        .item{
+
+        .a-item {
             display: none;
         }
     </style>
 </head>
 <body>
-<div class="wrap">
-    <div class="nav">
-        <div class="nav-top">
-
+<div class="a-wrap">
+    <div class="a-nav">
+        <div class="a-nav-top">
             <h3>支付方式管理
                 <small>payment mode manage</small>
             </h3>
             <ol class="breadcrumb">
-                <li><a href="#"><i class="glyphicon glyphicon-home"></i> 基础模块</a></li>
-                <li class="active">支付方式管理</li>
+                <li><a href="javascript:;"><i class="glyphicon glyphicon-home"></i> 基础模块</a></li>
+                <li><a href="javascript:;">支付方式管理</a></li>
+                <li class="active">列表</li>
             </ol>
-
         </div>
-        <div class="nav-content">
-            <div id="infoPanel" class="panel panel-default">
+        <div class="a-nav-content">
+            <div id="a-infoPanel" class="panel panel-default">
                 <div class="panel-heading">
-                    <a class="state btn btn-default add" role="button" href="/admin/payMode/add"><i
-                            class="glyphicon glyphicon-plus"></i>新增</a>
-                    <span id="itemZone">
-                        <a class="state btn btn-default edit" role="button" href="/admin/payMode/edit"><i
-                                class="glyphicon glyphicon-pencil"></i>编辑</a>
-                        <a class="btn btn-default remove" role="button" href="/admin/payMode/removeHandle"><i
-                                class="glyphicon glyphicon-remove"></i>删除</a>
+                    <span class="a-tool-btns">
+                          <a class="btn btn-default a-list active" role="button" breadcrumb="列表">
+                              <i class="glyphicon glyphicon-th-list"></i><span>列表</span>
+                          </a>
+                          <a class="state btn btn-default a-add" role="button" href="/admin/payMode/add"
+                             context="#a-form" breadcrumb="新增">
+                              <i class="glyphicon glyphicon-plus"></i><span>新增</span>
+                          </a>
                     </span>
-                    <a class="state btn btn-default item" role="button" href="/admin/payMode/item"><i
-                            class="glyphicon glyphicon-plus"></i>查看</a>
-            <span class="btn-nav">
-                <button id="advancedSearch" class="btn btn-default pull-right" type="button" data-toggle="tooltip"
-                        data-placement="left" title="" data-original-title="展开高级搜索"><i
-                        class="glyphicon glyphicon-menu-hamburger"></i></button>
-                <input type="text" id="searchBtn" class="form-control pull-right" placeholder="支付名称">
-                 <a class="state btn btn-default trash pull-right" role="button" href="/admin/payMode/trash"><i
-                         class="glyphicon glyphicon-trash"></i>回收站</a>
-            </span>
+
+                    <span class="a-item-tool-btns">
+                        <a class="state btn btn-default a-edit" role="button" href="/admin/payMode/edit"
+                           context="#a-form" breadcrumb="编辑">
+                            <i class="glyphicon glyphicon-pencil"></i><span>编辑</span>
+                        </a>
+                        <a class="btn btn-default a-remove" role="button" href="/admin/payMode/removeHandle">
+                            <i class="glyphicon glyphicon-remove"></i><span>删除</span>
+                        </a>
+                        <a class="state btn btn-default a-item" role="button" href="/admin/payMode/item">
+                            <i class="glyphicon glyphicon-eye-open" ></i><span>查看</span>
+                        </a>
+                    </span>
+
+                    <span class="a-search-btns">
+                        <button id="a-adv-search-btn" class="btn btn-default pull-right" type="button"
+                                data-toggle="tooltip"
+                                data-placement="left" title="" data-original-title="展开高级搜索">
+                            <i class="glyphicon glyphicon-menu-hamburger"></i>
+                        </button>
+                        <input type="text" id="a-searchInput" class="form-control pull-right" placeholder="支付名称">
+                         <a class="btn btn-default pull-right a-trash" role="button"
+                             breadcrumb="回收站">
+                             <i class="glyphicon glyphicon-trash"></i><span>回收站</span>
+                         </a>
+                    </span>
 
                 </div>
                 <div class="panel-body" style="display: none;">
@@ -98,9 +117,9 @@
             </div>
         </div>
     </div>
-    <div class="body">
-
-        <div id="grid"></div>
+    <div class="a-body">
+        <div id="a-grid"></div>
+        <div id="a-form"></div>
     </div>
 </div>
 <script>
@@ -110,11 +129,15 @@
                 read: {
                     'url': "/admin/payMode/getPayList",
                     'dataType': 'json',
-                    'type': 'get'
+                    'type': 'get',
+                    'data': {
+                        parentId: 0,
+                        cateId: 0
+                    }
                 }
             },
             filter: {
-                field: "Name", value: '123'
+                field: "isDel", value: '0'  //没删除的记录
             },
             schema: {
                 data: function (response) {
@@ -124,16 +147,16 @@
                     return response.total;
                 }
             },
-            pageSize: 5,
+            pageSize: 10,    //默认页数
             serverPaging: true,
             serverSorting: true,
             serverFiltering: true
         });
 
-        var grid = $("#grid").kendoGrid({
+        var grid = $("#a-grid").kendoGrid({
             dataSource: sharableDataSource,
             selectable: "row",
-            height: 550,
+//            height: 550,
             sortable: true,
             pageable: {
                 refresh: true,
@@ -141,59 +164,149 @@
                 buttonCount: 5
             },
             columns: [{
+                headerTemplate: "<label><input type='checkbox' value='#:id#' >全选</label>",
                 field: "id",
-                hidden: true
+                template: "<input type='checkbox' >",
+                sortable: false,
+//                filterable : false,
+//                columns : false,
+                width: 60
+//                hidden: true
             }, {
                 template: "#: name #",
                 field: "name",
                 title: "支付名称",
                 width: 240
             }, {
-                template: "<img class='pay-logo' src='#:logo_path#'>",
+                template: "<img class='a-pay-logo' src='#:logo_path#'>",
                 field: "logo_path",
-                title: "logo"
+                title: "logo",
+                sortable: false
             }, {
                 field: "remark",
                 title: "描述"
-            }]
+            }, {
+                template: "<label><input type='checkbox' #if( enable ) {# checked #}# ></label>",
+                field: "enable",
+                title: "启用"
+            }],
+//            columnMenu: {
+//                filterable: false
+//            },
+            noRecords: {
+                template: "还没有记录."
+            },
+            scrollable: false   //是否出现滚动条
         }).data("kendoGrid");
-//        传递参数
-        var params = '';
-//        表格行被单击,显示编辑和删除,并设置主键
-        $("#grid").on('click', 'tr', function () {
-            $("#itemZone").show();
-            var item = grid.dataItem($(this));
-            params = 'id=' + item.id;
-//           设置新增和编辑页面的传递参数
-            $(".add").attr('params', params);
-            $(".edit").attr('params', params);
+
+        $("#a-grid").on('click', 'tr', function () {
+            var that = $(this);
+            var res = that.hasClass('k-state-selected');
+            if(res){
+                $(".a-item-tool-btns").show();
+            }
         });
 //        表格行被双击,显示详细页面
-        $("#grid").on('dblclick', 'tr', function () {
-            var item = $(".item");
+        $("#a-grid").on('dblclick', 'tr', function () {
+            //没有被选中,则不执行,修复不小心点开的bug
+            var that = $(this);
+            var res = that.hasClass('k-state-selected');
+            if(!res) return;
+
+            var item = $(".a-item");
             $.get(item.attr('href'), function (html) {
                 layer.open({
-                    area:  ['auto', '500px'],
+                    area: ['auto', '500px'],
                     type: 1,
                     content: html
                 });
             });
         });
-//        删除功能
-        $(".remove").on('click', function () {
-            var that = $(this);
-            layer.confirm('是否删除?', {icon: 3, title: '提示'}, function (index) {
 
-                $.post(that.attr('href'), params, function (obj) {
-                    layer.msg(obj.msg);
-                });
-                //TODO 更新grid
 
-                layer.close(index);
+        //搜索功能
+        $(".panel-heading").on('click', '#a-searchInput', function () {
+
+            //隐藏指定项工具按钮
+            $(".a-item-tool-btns").hide();
+            sharableDataSource.query({
+                search: 'search'
             });
+        });
+        //视图切换
+        function viewSwitch(view){
+            $("#a-grid tr").removeClass('k-state-selected');
+            //clean 传递参数
+            $('.a-edit').attr('params', '');
+            $('.a-remove').attr('params', '');
+            if (view == 'grid'){
+                $("#a-form").hide();
+                $("#a-grid").show();
+            }else if(view == 'form'){
+                $("#a-grid").hide();
+                $("#a-form").show();
+            }
+        }
+//        列表
+        $(".panel-heading").on('click', '.a-list', function () {
+            viewSwitch('grid');
+            sharableDataSource.query({
+                filter: {
+                    field: "isDel", value: '0'
+                }
+            });
+            //隐藏指定项工具按钮
+            $(".a-item-tool-btns").hide();
+        });
+        //add
+        $(".panel-heading").on('click', '.a-add', function () {
+            viewSwitch('form');
+        });
+        //edit
+        $(".panel-heading").on('click', '.a-edit', function () {
+            //判断是否选中了一行
+            var $tr = $("#a-grid tr.k-state-selected").eq(0);
+            var item = grid.dataItem($tr);
+            if (item){
+                $(this).attr('params', 'id='+item.id);
+                viewSwitch('form');
+            }else{
+                layer.msg('你需要选择一项!');
+            }
+        });
+        //remove
+        $(".panel-heading").on('click', '.a-remove', function () {
+            var that = $(this);
+            var $tr = $("#a-grid tr.k-state-selected").eq(0);
+            var item = grid.dataItem($tr);
+            if($tr.length){
+                layer.confirm('是否删除?', {icon: 3, title: '提示'}, function (index) {
+
+                    $.post(that.attr('href'), 'id='+item.id, function (obj) {
+
+                        if(obj.success == 1){
+                            sharableDataSource.read();
+                        }else{
+                            layer.msg(obj.msg);
+                        }
+                    });
+                    layer.close(index);
+                });
+            }else{
+                layer.msg('你需要选择一项');
+            }
             return false;
         });
-        //搜索功能
+        //回收站
+        $(".panel-heading").on('click', '.a-trash', function () {
+            viewSwitch('grid');
+            sharableDataSource.query({
+                filter: {
+                    field: "isDel", value: '1'
+                }
+            });
+        });
+
 //        timer = null;
 //        $("#searchBtn").keyup(function () {
 //            timer || clearTimeout(timer);

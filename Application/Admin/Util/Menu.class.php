@@ -38,10 +38,6 @@ class Menu
                 [
                     'title' => '支付方式管理',
                     'url' => '/admin/payMode/index'
-                ],
-                [
-                    'title' => '地理信息管理',
-                    'url' => '/admin/geography/index'
                 ]
             ]
         ],

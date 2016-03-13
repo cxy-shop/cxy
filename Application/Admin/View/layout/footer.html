@@ -2,16 +2,16 @@
     <script>
         $(function () {
 //        主内容JQ对象
-            var $main = $('#main');
+            var $main = $('#t-main');
 
 //        菜单效果 start
-            $(".side >ul >li >a").on('click', function () {
+            $(".t-side >ul >li >a").on('click', function () {
                 var that = $(this);
                 //修改兄弟节点的三角图标向右
-                that.parent().siblings().find('.side-right i').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right')
+                that.parent().siblings().find('.t-side-right i').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right')
                         .end().end().end()
                         //修改当前节点三角图标向下
-                        .find('.side-right i').toggleClass('glyphicon-triangle-right').toggleClass('glyphicon-triangle-bottom');
+                        .find('.t-side-right i').toggleClass('glyphicon-triangle-right').toggleClass('glyphicon-triangle-bottom');
 
                 //让兄弟节点展开菜单收缩
                 that.parent().siblings().find('ul').slideUp()
@@ -19,28 +19,53 @@
                         //让当前节点展开菜单下拉
                         .next('ul').slideToggle();
             });
-            $(".side >ul >li > ul a").on('click', function () {
-                $(".side >ul >li > ul a").removeClass('active');
+            $(".t-side >ul >li > ul a").on('click', function () {
+                $(".t-side >ul >li > ul a").removeClass('active');
                 $(this).toggleClass('active');
             });
 //        菜单效果 end
 
-//        主内容路由 start
-            $(".frame").on('click', 'a.state', function () {
+//        路由 start
+            $(".t-frame").on('click', 'a.state', function () {
                 var that = $(this);
+                var context = that.attr('context');
                 var url = that.attr('href');
                 var params = that.attr('params');
-                if (params) {
-                    $main.load(url + '?' + params);
-                } else {
-                    $main.load(url);
+                var version = Math.random();    //版本号
+                if (context){
+                    if (params) {
+                        $(context).load(url + '?' + params +'&v='+version);
+                    } else {
+                        $(context).load(url+'?v='+version);
+                    }
+                }else{
+                    if (params) {
+                        $main.load(url + '?' + params+'&v='+version);
+                    } else {
+                        $main.load(url+'?v='+version);
+                    }
                 }
+
                 return false;
             });
-//        主内容路由 end
+//        路由 end
+
+//            路径显示与按钮激活 start
+            $(".t-frame").on('click', 'a[breadcrumb]', function () {
+                var that = $(this);
+                //去除其他按钮激活
+                $(".t-frame a[breadcrumb]").removeClass('active');
+                //激活当前按钮
+                that.addClass('active');
+                //设置路径
+                $("#t-main .breadcrumb li").eq(2).text(that.attr('breadcrumb'));
+
+                return false;
+            });
+//            路径显示与按钮激活 end
             var login = true;
 //            注销登录 start
-            $("#btnLogout").on('click', function () {
+            $("#t-btnLogout").on('click', function () {
                 var that = $(this);
                 layer.confirm('是否退出系统?', {icon: 3, title: '提示'}, function (index) {
                     //ok=1没意义,但是不给参数异步会出问题

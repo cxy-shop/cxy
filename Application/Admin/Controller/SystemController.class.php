@@ -28,7 +28,7 @@ class SystemController extends BaseController
             $userService->registerUser();
             $this->ajaxSuccess('登录成功', ['url' => self::$homePage]);
         } else {
-            $this->ajaxError('登录失败,请检查用户名和密码');
+            $this->ajaxFail('登录失败,请检查用户名和密码');
         }
     }
 

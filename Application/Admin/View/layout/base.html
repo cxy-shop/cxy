@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>电商系统后台</title>
-    <link rel="shortcut icon" href="/Public/Admin/img/favicon.ico" type="image/vnd.microsoft.icon" />
+    <link rel="shortcut icon" href="/Public/Admin/img/favicon.ico" type="image/vnd.microsoft.icon"/>
     <link rel="stylesheet" href="/Public/3rd/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="/Public/3rd/kendo/styles/web/kendo.common.min.css">
     <link rel="stylesheet" href="/Public/3rd/kendo/styles/web/kendo.default.css">
     <style>
         /*整体布局 start*/
-        .frame {
+        .t-frame {
             position: absolute;
             top: 0;
             right: 0;
@@ -17,7 +17,7 @@
             left: 0;
         }
 
-        .header {
+        .t-header {
             height: 45px;
             position: absolute;
             top: 0;
@@ -26,7 +26,7 @@
             background: #09C;
         }
 
-        .side {
+        .t-side {
             width: 200px;
             position: absolute;
             top: 45px;
@@ -35,7 +35,7 @@
             background: #22282E;
         }
 
-        .content {
+        .t-content {
             position: absolute;
             top: 45px;
             right: 0;
@@ -48,7 +48,7 @@
         /*整体布局 end*/
 
         /*头部布局 start*/
-        .logo {
+        .t-logo {
             float: left;
             height: 45px;
             line-height: 45px;
@@ -57,30 +57,30 @@
             color: #fff;
         }
 
-        .user-info {
+        .t-user-info {
             height: 45px;
             float: right;
             line-height: 45px;
             color: #fff;
         }
 
-        .info {
+        .t-info {
             float: left;
             margin-right: 10px;
         }
 
-        .info img {
+        .t-info img {
             width: 30px;
             height: 30px;
             border-radius: 100%;
         }
 
-        .logout {
+        .t-logout {
 
             float: right;
         }
 
-        #btnLogout {
+        #t-btnLogout {
             padding: 3px 10px;
             color: #ffffff;
         }
@@ -88,22 +88,22 @@
         /*头部布局 end*/
 
         /*左侧菜单布局 start*/
-        .side a {
+        .t-side a {
             color: #ffffff;
             font-size: 12px;
         }
 
-        .side ul {
+        .t-side ul {
             margin: 0px;
             padding: 0px;
             list-style: none;
         }
 
-        .side a, .side a:hover {
+        .t-side a, .t-side a:hover {
             text-decoration: none;
         }
 
-        .side > ul > li > a {
+        .t-side > ul > li > a {
             position: relative;
             display: block;
             width: 200px;
@@ -112,24 +112,24 @@
             background: rgba(9, 14, 15, 0.15);
         }
 
-        .side > ul > li > ul {
+        .t-side > ul > li > ul {
             display: none;
         }
 
-        .side-title {
+        .t-side-title {
             float: left;
         }
 
-        .side-left {
+        .t-side-left {
             padding-right: 10px;
             padding-left: 15px;
         }
 
-        .side-right {
+        .t-side-right {
             padding-right: 10px;
         }
 
-        .side > ul > li > ul > li > a {
+        .t-side > ul > li > ul > li > a {
             padding-left: 45px;
             position: relative;
             display: block;
@@ -139,22 +139,31 @@
             background: rgba(6, 13, 15, 0.55);
         }
 
-        .side > ul > li > ul > li > a:hover {
+        .t-side > ul > li > ul > li > a:hover {
             background: rgba(17, 55, 117, 0.07);
         }
 
-        .side > ul > li > ul > li > a.active {
+        .t-side > ul > li > ul > li > a.active {
             width: 197px;
             border-left: 3px solid #2aabd2;
         }
-
         /*左侧菜单布局 end*/
+
+        /*修改kendoui样式 start*/
+        .k-state-selected {
+            background-color: #8F88EF;
+            border-color: #7E6FC7;
+        }
+        /*修改kendoui样式 end*/
     </style>
-    <script src="/Public/3rd/jquery/2.2.0/jquery.min.js"></script>
-    <script src="/Public/3rd/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="/Public/3rd/layer/1.9.3/layer.min.js"></script>
-    <script src="/Public/3rd/kendo/js/kendo.all.min.js"></script>
-    <script src="/Public/3rd/kendo/js/cultures/kendo.culture.zh-CN.min.js"></script>
-    <script src="/Public/3rd/kendo/js/messages/kendo.messages.zh-CN.min.js"></script>
+
+    <literal>
+        <script src="/Public/3rd/jquery/2.2.0/jquery.min.js"></script>
+        <script src="/Public/3rd/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="/Public/3rd/layer/1.9.3/layer.min.js"></script>
+        <script src="/Public/3rd/kendo/js/kendo.all.min.js"></script>
+        <script src="/Public/3rd/kendo/js/cultures/kendo.culture.zh-CN.min.js"></script>
+        <script src="/Public/3rd/kendo/js/messages/kendo.messages.zh-CN.min.js"></script>
+    </literal>
 </head>
 <body>

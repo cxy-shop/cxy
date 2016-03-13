@@ -28,7 +28,7 @@ class BaseController extends Controller
         $userService = new UserModel();
         if (!self::isIgnoreUrl(__INFO__) && !$userService->isLogin()) {
             if (IS_AJAX){
-                $this->ajaxError('没有权限!');
+                $this->ajaxFail('没有权限!');
             }else{
                 $this->redirect(self::$loginPage);
             }
@@ -55,7 +55,7 @@ class BaseController extends Controller
      * 失败返回json
      * @param string $msg
      */
-    public function ajaxError($msg = '操作失败')
+    public function ajaxFail($msg = '操作失败')
     {
         $this->ajaxReturn([
             'success' => 0,
