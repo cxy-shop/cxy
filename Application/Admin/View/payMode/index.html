@@ -1,64 +1,57 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-    <style>
-        .a-wrap {
-            padding: 0px 10px;
-        }
+<style>
+    .a-wrap {
+        padding: 0px 10px;
+    }
 
-        .a-nav {
-            width: 100%;
-        }
+    .a-nav {
+        width: 100%;
+    }
 
-        .a-nav-top {
-            display: block;
-            position: relative;
-        }
+    .a-nav-top {
+        display: block;
+        position: relative;
+    }
 
-        .a-nav-top > .breadcrumb {
-            float: right;
-            background: transparent;
-            margin-top: 0;
-            margin-bottom: 0;
-            font-size: 12px;
-            padding: 7px 5px;
-            position: absolute;
-            top: 0px;
-            right: 10px;
-            border-radius: 2px;
-        }
+    .a-nav-top > .breadcrumb {
+        float: right;
+        background: transparent;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 12px;
+        padding: 7px 5px;
+        position: absolute;
+        top: 0px;
+        right: 10px;
+        border-radius: 2px;
+    }
 
-        .a-nav-content {
-            clear: both;
-        }
+    .a-nav-content {
+        clear: both;
+    }
 
-        .a-body {
-            width: 100%;
-            position: relative;
-            margin-top: -15px;
-        }
+    .a-body {
+        width: 100%;
+        position: relative;
+        margin-top: -15px;
+    }
 
-        .a-pay-logo {
-            max-width: 200px;
-            max-height: 40px;
-        }
+    .a-pay-logo {
+        max-width: 200px;
+        max-height: 40px;
+    }
 
-        #a-searchInput {
-            width: 200px;
-        }
+    #a-searchInput {
+        width: 200px;
+    }
 
-        .a-item-tool-btns {
-            display: none;
-        }
+    .a-item-tool-btns {
+        display: none;
+    }
 
-        .a-item {
-            display: none;
-        }
-    </style>
-</head>
-<body>
+    .a-item {
+        display: none;
+    }
+</style>
 <div class="a-wrap">
     <div class="a-nav">
         <div class="a-nav-top">
@@ -79,21 +72,21 @@
                               <i class="glyphicon glyphicon-th-list"></i><span>列表</span>
                           </a>
                           <a class="state btn btn-default a-add" role="button" href="/admin/payMode/add"
-                             context="#a-add-form" breadcrumb="新增">
+                             context="#a-add-view" breadcrumb="新增">
                               <i class="glyphicon glyphicon-plus"></i><span>新增</span>
                           </a>
                     </span>
 
                     <span class="a-item-tool-btns">
                         <a class="state btn btn-default a-edit" role="button" href="/admin/payMode/edit"
-                           context="#a-edit-form" breadcrumb="编辑">
+                           context="#a-edit-view" breadcrumb="编辑">
                             <i class="glyphicon glyphicon-pencil"></i><span>编辑</span>
                         </a>
                         <a class="btn btn-default a-remove" role="button" href="/admin/payMode/removeHandle">
                             <i class="glyphicon glyphicon-remove"></i><span>删除</span>
                         </a>
                         <a class="state btn btn-default a-item" role="button" href="/admin/payMode/item">
-                            <i class="glyphicon glyphicon-eye-open" ></i><span>查看</span>
+                            <i class="glyphicon glyphicon-eye-open"></i><span>查看</span>
                         </a>
                     </span>
 
@@ -105,7 +98,7 @@
                         </button>
                         <input type="text" id="a-searchInput" class="form-control pull-right" placeholder="支付名称">
                          <a class="btn btn-default pull-right a-trash" role="button"
-                             breadcrumb="回收站">
+                            breadcrumb="回收站">
                              <i class="glyphicon glyphicon-trash"></i><span>回收站</span>
                          </a>
                     </span>
@@ -119,8 +112,8 @@
     </div>
     <div class="a-body">
         <div id="a-grid"></div>
-        <div id="a-add-form"></div>
-        <div id="a-edit-form"></div>
+        <div id="a-add-view"></div>
+        <div id="a-edit-view"></div>
     </div>
 </div>
 <script>
@@ -156,14 +149,6 @@
 
         var grid = $("#a-grid").kendoGrid({
             dataSource: sharableDataSource,
-            selectable: "row",
-//            height: 550,
-            sortable: true,
-            pageable: {
-                refresh: true,
-                pageSizes: true,
-                buttonCount: 5
-            },
             columns: [{
                 headerTemplate: "<label><input type='checkbox' value='#:id#' >全选</label>",
                 field: "id",
@@ -179,21 +164,32 @@
                 title: "支付名称",
                 width: 240
             }, {
-                template: "<img class='a-pay-logo' src='#:logo_path#'>",
+                template: "<img class='a-pay-logo' src='/Static/payMode/#:logo_path#'>",
                 field: "logo_path",
                 title: "logo",
                 sortable: false
             }, {
                 field: "remark",
-                title: "描述"
+                title: "描述",
+                sortable: false
             }, {
                 template: "<label><input type='checkbox' #if( enable ) {# checked #}# ></label>",
                 field: "enable",
-                title: "启用"
+                title: "启用",
+                sortable: false
             }],
 //            columnMenu: {
 //                filterable: false
 //            },
+            selectable: "row",
+//            height: 550,
+            sortable: true,
+            resizable: true,
+            pageable: {
+                refresh: true,
+                pageSizes: true,
+                buttonCount: 5
+            },
             noRecords: {
                 template: "还没有记录."
             },
@@ -204,7 +200,7 @@
             var that = $(this);
             //选择了一行才显示项工具按钮组
             var res = that.hasClass('k-state-selected');
-            if(res){
+            if (res) {
                 $(".a-item-tool-btns").show();
             }
         });
@@ -213,7 +209,7 @@
             //没有被选中,则不执行,修复不小心点开的bug
             var that = $(this);
             var res = that.hasClass('k-state-selected');
-            if(!res) return;
+            if (!res) return;
 
             var item = $(".a-item");
             $.get(item.attr('href'), function (html) {
@@ -224,41 +220,51 @@
                 });
             });
         });
-
-        //搜索功能
+        var timer = 1;
         $(".panel-heading").on('click', '#a-searchInput', function () {
-            var that = $(this);
             //隐藏指定项工具按钮
             $(".a-item-tool-btns").hide();
-            sharableDataSource.query({
-                search: that.val()
-            });
+        });
+        //搜索功能
+        $(".panel-heading").on('keyup', '#a-searchInput', function () {
+            var that = $(this);
+
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                clearTimeout(timer);
+                sharableDataSource.query({
+                    search: that.val()
+                });
+            }, 600);
+
         });
 
         //视图切换
-        function viewSwitch(view){
+        function viewSwitch(view) {
             //先隐藏所有视图
             $('.a-body > div').hide();
-
+            //取消gird 行选中
             $("#a-grid tr").removeClass('k-state-selected');
             //clean 传递参数
             $('.a-edit').attr('params', '');
             $('.a-remove').attr('params', '');
-            if (view == 'grid'){
+            //显示对应视图
+            if (view == 'grid') {
                 $("#a-grid").show();
-            }else if(view == 'add'){
-                $("#a-add-form").show();
-            }else if(view == 'edit'){
-                $("#a-edit-form").show();
+            } else if (view == 'add') {
+                $("#a-add-view").show();
+            } else if (view == 'edit') {
+                $("#a-edit-view").show();
             }
         }
 
 //        列表
         $(".panel-heading").on('click', '.a-list', function () {
+
             //隐藏指定项工具按钮
             $(".a-item-tool-btns").hide();
             viewSwitch('grid');
-            sharableDataSource.query({
+            sharableDataSource.read({
                 filter: {
                     field: "isDel", value: '0'
                 }
@@ -278,10 +284,10 @@
             //判断是否选中了一行
             var $tr = $("#a-grid tr.k-state-selected").eq(0);
             var item = grid.dataItem($tr);
-            if (item){
-                $(this).attr('params', 'id='+item.id);
+            if (item) {
+                $(this).attr('params', 'id=' + item.id);
                 viewSwitch('edit');
-            }else{
+            } else {
                 layer.msg('你需要选择一项!');
             }
         });
@@ -292,19 +298,19 @@
             var that = $(this);
             var $tr = $("#a-grid tr.k-state-selected").eq(0);
             var item = grid.dataItem($tr);
-            if($tr.length){
+            if ($tr.length) {
                 layer.confirm('是否删除?', {icon: 3, title: '提示'}, function (index) {
 
-                    $.post(that.attr('href'), 'id='+item.id, function (obj) {
-                        if(obj.success == 1){
+                    $.post(that.attr('href'), 'id=' + item.id, function (obj) {
+                        if (obj.success == 1) {
                             sharableDataSource.read();
-                        }else{
+                        } else {
                             layer.msg(obj.msg);
                         }
                     });
                     layer.close(index);
                 });
-            }else{
+            } else {
                 layer.msg('你需要选择一项');
             }
             return false;
@@ -315,28 +321,14 @@
             //隐藏指定项工具按钮
             $(".a-item-tool-btns").hide();
             viewSwitch('grid');
-            sharableDataSource.query({
+            sharableDataSource.read({
                 filter: {
                     field: "isDel", value: '1'
                 }
             });
         });
 
-//        timer = null;
-//        $("#searchBtn").keyup(function () {
-//            timer || clearTimeout(timer);
-//            timer = setTimeout(function () {
-//                clearTimeout(timer);
-//                grid.data("kendoGrid").dataSource.filter([
-//                    {field: "Name", value: name},
-//                    {field: "Age", value: 123}
-//                ]);
-//            }, 500);
-//
-//        });
 
     });
 
 </script>
-</body>
-</html>

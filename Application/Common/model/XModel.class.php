@@ -11,6 +11,7 @@
  */
 namespace Common\Model;
 
+use Admin\Model\UserModel;
 use Think\Model;
 
 class XModel extends Model
@@ -26,7 +27,27 @@ class XModel extends Model
     }
 
     /**
-     * 以下是为了支持IDE感应而编写的方法
+     * 丢入回收站或者删除记录
+     * 如果没有删除就丢入回收站
+     * 如果删除了就从数据库删除记录
+     * @param $id
+     * @return bool|mixed
+     */
+    public function toTrashOrtoDelete($id){
+        $item = $this->field('is_del')->find($id);
+        $res = true;
+        if ( isset($item['is_del']) && $item['is_del'] == 0 ){
+            $data = [
+                'is_del'    =>  1
+            ];
+            $res = $this->where('id=' . $id)->data($data)->save();
+        }else{
+            $res = $this->where('id=' . $id)->limit(1)->delete();
+        }
+        return $res;
+    }
+    /**
+     * 以下是为了支持IDE方法自动提示而编写的方法
      * 'strict','order','alias','having','group','lock','distinct','auto','filter','validate','result','token','index','force'
      * 'count','sum','min','max','avg'
      */

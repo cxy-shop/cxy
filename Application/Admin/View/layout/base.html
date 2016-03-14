@@ -155,12 +155,21 @@
             border-color: #7E6FC7;
         }
         /*修改kendoui样式 end*/
+
+        /*form 公共样式 start*/
+        input[required]:before{
+            content: '*';
+            display: inline-block;
+            color: red;
+        }
+        /*form 公共样式 end*/
     </style>
 
     <literal>
         <script src="/Public/3rd/jquery/2.2.0/jquery.min.js"></script>
         <script src="/Public/3rd/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script src="/Public/3rd/layer/1.9.3/layer.min.js"></script>
+        <script src="/Public/Admin/js/jqueryInterceptor.js"></script>
         <script src="/Public/3rd/kendo/js/kendo.all.min.js"></script>
         <script src="/Public/3rd/kendo/js/cultures/kendo.culture.zh-CN.min.js"></script>
         <script src="/Public/3rd/kendo/js/messages/kendo.messages.zh-CN.min.js"></script>

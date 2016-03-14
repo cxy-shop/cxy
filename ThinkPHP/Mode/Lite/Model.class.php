@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-namespace Think;
+namespace Think\Lite;
 /**
  * ThinkPHP Model模型类
  * 实现了ORM和ActiveRecords模式
