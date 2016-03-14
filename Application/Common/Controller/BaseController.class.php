@@ -25,8 +25,7 @@ class BaseController extends Controller
      */
     protected function _initialize()
     {
-        $userService = new UserModel();
-        if (!self::isIgnoreUrl(__INFO__) && !$userService->isLogin()) {
+        if (!self::isIgnoreUrl(__INFO__) && !UserModel::isLogin()) {
             if (IS_AJAX){
                 $this->ajaxFail('没有权限!');
             }else{

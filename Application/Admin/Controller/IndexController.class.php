@@ -14,20 +14,4 @@ class IndexController extends BaseController {
         $this->display();
     }
 
-    public function getData(){
-        $data = [];
-        for($i = 0; $i < 10; $i++){
-            $data[] = [
-                'id'    =>  $i,
-                'name'  =>  'lisi'.$i,
-                'age'   =>  20+$i
-            ];
-        }
-
-        $this->ajaxReturn([
-            'data'  =>  $data,
-            'total' => count($data)
-        ]);
-    }
-
 }

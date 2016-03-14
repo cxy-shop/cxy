@@ -21,11 +21,10 @@ class SystemController extends BaseController
     {
         $username = I('username');
         $password = I('password');
-        $userService = new UserModel();
 
-        $res = $userService->validatePassoword($username, $password);
+        $res = UserModel::validatePassoword($username, $password);
         if ($res) {
-            $userService->registerUser();
+            UserModel::registerUser();
             $this->ajaxSuccess('登录成功', ['url' => self::$homePage]);
         } else {
             $this->ajaxFail('登录失败,请检查用户名和密码');
@@ -37,8 +36,7 @@ class SystemController extends BaseController
      */
     public function logoutHandle()
     {
-        $userService = new UserModel();
-        $userService->destroyUser();
+        UserModel::destroyUser();
         $this->ajaxSuccess('退出成功', ['url' => self::$loginPage]);
     }
 }

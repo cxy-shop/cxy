@@ -8,35 +8,46 @@
 namespace Admin\Model;
 use Think\Model;
 class UserModel extends Model{
-    protected $user = null;
+    protected static $user = null;
+    const userSymbol = 'user';
     /**
      * 判断是否登录
      * @return bool
      */
-    public function isLogin(){
-        return !empty(session('user'));
+    public static function isLogin(){
+        return !empty(session(self::userSymbol));
     }
 
     /**
-     * 获取用户信息
+     * 从session中获取用户信息
      * @return mixed
      */
-    public function getUser(){
-        return session('user');
+    public static function getUser(){
+        return session(self::userSymbol);
     }
 
     /**
-     * 设置用户信息
+     * 设置用户信息到session
      * @param $user
      */
-    public function setUser($user){
-        session('user', $user);
+    public static function setUser($user){
+        session(self::userSymbol, $user);
     }
 
-    public function validatePassoword($username = '', $password = ''){
-        $this->user = $this->where(['username' => $username])->find();
+    /**
+     * 验证用户密码是否正确
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
+    public static function validatePassoword($username = '', $password = ''){
+        $userModelService = new self();
+        self::$user = $userModelService->where(['username' => $username])->find();
+        //用户名不存在
+        if ( empty(self::$user) ) return false;
 
-        if ($this->user['password'] === $password){
+        //判断用户密码是否正确
+        if ( self::$user['password'] === $password ){
             return true;
         }else{
             return false;
@@ -44,15 +55,21 @@ class UserModel extends Model{
 
     }
 
-    public function registerUser(){
-        if ( isset($this->user['password']) ){
-            unset($this->user['password']);
+    /**
+     * 注册用户session信息
+     */
+    public static function registerUser(){
+        if ( isset(self::$user['password']) ){
+            unset(self::$user['password']);
         }
-        $this->setUser($this->user);
+        self::setUser(self::$user);
     }
 
-    public function destroyUser(){
-        session('user', null);
+    /**
+     * 销毁用户session
+     */
+    public static function destroyUser(){
+        session(self::userSymbol, null);
         session(null);
     }
 }
