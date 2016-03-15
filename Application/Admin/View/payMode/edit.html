@@ -1,29 +1,36 @@
-<div class="container-fluid">
-    <div class="row">
-        <form class="col-md-8 col-md-offset-2 form-horizontal">
-            <div class="form-group">
-                <label for="b-name" class="col-sm-3 control-label">支付方式名称</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="b-name" name="name" value="1111">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="b-remark" class="col-sm-3 control-label">描述</label>
-                <div class="col-sm-9">
-                    <textarea class="form-control" name="remark" id="b-remark" cols="30" rows="10">qqqq</textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="b-logo" class="col-sm-3 control-label">logo</label>
-                <div class="col-sm-9">
-                    <input type="file" name="logo" id="b-logo">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-9">
-                    <button type="submit" class="btn btn-default">提交</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+<extend name="payMode:base"/>
+
+<block name="form">
+    <form id="b-add-form" class="col-md-8 col-md-offset-2 form-horizontal"
+          action="/admin/payMode/editHandle"
+          method="post">
+</block>
+
+<block name="name">
+    <input type="text" class="form-control" id="b-name" name="name" required value="{$payMode['name']}">
+</block>
+
+<block name="remark">
+    <textarea class="form-control" name="remark" id="b-remark" cols="30"
+              rows="10">{$payMode['remark']}</textarea>
+</block>
+
+<block name="file">
+    <input type="file" id="b-logo-file" name="file">
+    <img src="/Static/payMode/{$payMode['logo_path']}" id="b-logo-img">
+    <input type="hidden" id="b-logo-path" name="logoPath" value="{$payMode['logo_path']}">
+</block>
+
+<block name="enable">
+    <if condition="$payMode['enable'] eq 1">
+        <input type="checkbox" class="form-control" id="b-enable" name="enable" value="1" checked>
+        <else/>
+        <input type="checkbox" class="form-control" id="b-enable" name="enable" value="1">
+    </if>
+</block>
+
+<block name="submit">
+    <input type="hidden" name="id" value="{$payMode['id']}">
+    <input type="hidden" id="b-old-logo-path" name="oldLogoPath" value="{$payMode['logo_path']}">
+    <button type="submit" class="btn btn-default">更新</button>
+</block>

@@ -17,11 +17,11 @@ class Menu
                 ],
                 [
                     'title' => '商品分类管理',
-                    'url' => '/admin/poductCate/index'
+                    'url' => '/admin/productCate/index'
                 ],
                 [
                     'title' => '商品属性管理',
-                    'ur;' => '/admin/productAttr/index'
+                    'url' => '/admin/productAttr/index'
                 ],
                 [
                     'title' => '商品单位管理',

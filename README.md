@@ -10,3 +10,9 @@
 * website/Static, Upload 目录及其子目录其他人需要有读写权限,不能有执行权限
 * website/Public 目录及其子目录其他人需要有读权限,不能有写和执行权限
 * Application Thinkphp Upload目录及其子目录 所有者和所在组都是php,其他人没有任何权限
+
+## 新增常量
+* __WEBSITE_PATH__ 表示系统入口目录的本地路径
+* __STATIC_PATH__ 表示系统存放静态文件目录的本地路径
+* __UPLOAD_TMP_PATH__ 表示上传文件临时存储的本地路径
+* __BACKUP_PATH__ 表示删除文件时备份文件的本地路径

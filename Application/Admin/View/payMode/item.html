@@ -1,13 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<div style="width: 500px;height: 1111px;">
-    qweeqwqwqeqwewqewqeqweqweqweqweq
-</div>
+<extend name="payMode:base"/>
 
-</body>
-</html>
+<block name="form">
+    <form id="b-add-form" class="col-md-8 col-md-offset-2 form-horizontal">
+</block>
+
+<block name="name">
+    <input type="text" class="form-control" id="b-name" name="name" required value="{$payMode['name']}" disabled>
+</block>
+
+<block name="remark">
+    <textarea class="form-control" name="remark" id="b-remark" cols="30"
+              rows="10" disabled>{$payMode['remark']}</textarea>
+</block>
+
+<block name="file">
+    <img src="/Static/payMode/{$payMode['logo_path']}" id="b-logo-img">
+</block>
+
+<block name="enable">
+    <if condition="$payMode['enable'] eq 1">
+        <input type="checkbox" class="form-control" id="b-enable" name="enable" value="1" checked disabled>
+        <else/>
+        <input type="checkbox" class="form-control" id="b-enable" name="enable" value="1" disabled>
+    </if>
+</block>
+
+<block name="submit">
+</block>
+
+<block name="js">
+</block>

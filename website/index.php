@@ -17,6 +17,11 @@ if(version_compare(PHP_VERSION,'5.3.0','<'))  die('require PHP > 5.3.0 !');
 // 开启调试模式 建议开发阶段开启 部署阶段注释或者设为false
 define('APP_DEBUG',True);
 
+//定义路径常量
+define('__WEBSITE_PATH__',str_replace('index.php', '', $_SERVER['SCRIPT_FILENAME']));
+define('__STATIC_PATH__',__WEBSITE_PATH__ . 'Static/');
+define('__UPLOAD_TMP_PATH__',__WEBSITE_PATH__ . 'Static/tmp/');
+define('__BACKUP_PATH__',str_replace('Website/index.php', '', $_SERVER['SCRIPT_FILENAME']) . 'Backup/');
 // 定义应用目录
 define('APP_PATH','../Application/');
 

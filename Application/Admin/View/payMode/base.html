@@ -1,0 +1,129 @@
+<style>
+    #b-logo-img {
+        max-width: 200px;
+        max-height: 40px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <block name="form"></block>
+        <div class="form-group">
+            <label for="b-name" class="col-sm-3 control-label" required>支付方式名称</label>
+            <div class="col-sm-9">
+                <block name="name"></block>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="b-remark" class="col-sm-3 control-label">描述</label>
+            <div class="col-sm-9">
+                <block name="remark"></block>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="b-logo-file" class="col-sm-3 control-label" required>logo</label>
+            <div class="col-sm-9">
+                <block name="file"></block>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="b-enable" class="col-sm-3 control-label">启用</label>
+            <div class="col-sm-9">
+                <block name="enable"></block>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <block name="submit"></block>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+<block name="js">
+    <literal>
+
+        <script>
+            //       logo文件上传 start
+            var update = $("#b-logo-file").kendoUpload({
+                async: {
+                    saveUrl: "/admin/payMode/uploadLogo",
+                    removeUrl: "/admin/payMode/removeUploadLogo",
+                    autoUpload: false
+                },
+                upload: onUpload,   //上传前做些操作
+                success: onSuccess, //上传成功时的操作
+                remove: onRemove,   //移除文件前操作
+                error: onError,      //上传失败时操作
+                multiple: false
+            }).data("kendoUpload");
+            function onUpload(e) {
+                var files = e.files;
+                $.each(files, function () {
+                    //判断文件类型是否合法
+                    var extension = this.extension.toLowerCase();
+                    if (-1 === $.inArray(extension, ['.jpg', '.gif', '.png', '.jpeg'])) {
+                        layer.msg('文件格式不对,只允许jpg,gif,png,jpeg为后缀的图片!');
+                        e.preventDefault();
+                    }
+                    //TODO 还需要检测文件大小是否合法
+                });
+            }
+            function onSuccess(e) {
+                var files = e.files;
+                if (e.operation == "upload") {
+                    var response = e.response;
+                    if (response.success == 1) {
+                        console.log(e.files);
+                        var path = response.data[0].path;
+                        //修改上传字段值
+                        $("#b-logo-path").val(path);
+                        //修改文件名为服务器存储文件名
+                        e.files[0].name = path;
+                        //设置缩略图
+                        $("#b-logo-img").attr('src', '/Static/tmp/' + response.data[0].path).show();
+                    }
+                } else if (e.operation == "remove") {
+                    //删除缩略图
+                    $("#b-logo-img").hide().attr('src', '');
+                    //重置上传字段值
+                    $("#b-logo-path").val('');
+                }
+
+            }
+            function onRemove(e) {
+                var files = e.files;
+                console.log(files[0].name);
+            }
+            function onError() {
+                layer.msg('操作失败!');
+            }
+            //      logo文件上传 end
+
+            //        表单提交
+            $("#b-add-form").submit(function () {
+                var that = $(this);
+                //提交前验证表单
+                //新增时没上传logo,或者编辑时没有老的logo,需要提示上传
+                if ($.trim($("#b-logo-path").val()) == '') {
+                    layer.msg('logo必需上传!');
+                    return false;
+                }
+
+                var action = that.attr('action');
+                var submitBtn = that.find('[type=submit]');
+
+                submitBtn.prop('disabled', true);
+                $.post(action, that.serialize(), function (obj) {
+                    if (obj.success == 1){
+                        layer.msg(obj.msg);
+                    }
+                }).always(function () {
+                    submitBtn.prop('disabled', false);
+                });
+                return false;
+            });
+        </script>
+
+    </literal>
+</block>

@@ -173,7 +173,7 @@
                 title: "描述",
                 sortable: false
             }, {
-                template: "<label><input type='checkbox' #if( enable ) {# checked #}# ></label>",
+                template: "<label><input type='checkbox' #if( enable == 1 ) {# checked #}# ></label>",
                 field: "enable",
                 title: "启用",
                 sortable: false
@@ -196,6 +196,7 @@
             scrollable: false   //是否出现滚动条
         }).data("kendoGrid");
 
+//         显示指定项操作工具栏
         $("#a-grid").on('click', 'tr', function () {
             var that = $(this);
             //选择了一行才显示项工具按钮组
@@ -204,6 +205,7 @@
                 $(".a-item-tool-btns").show();
             }
         });
+
 //        表格行被双击,显示详细页面
         $("#a-grid").on('dblclick', 'tr', function () {
             //没有被选中,则不执行,修复不小心点开的bug
@@ -211,21 +213,27 @@
             var res = that.hasClass('k-state-selected');
             if (!res) return;
 
-            var item = $(".a-item");
-            $.get(item.attr('href'), function (html) {
+            var itemBtn = $(".a-item");
+            var $tr = $("#a-grid tr.k-state-selected").eq(0);
+            var item = grid.dataItem($tr);
+
+            $.get(itemBtn.attr('href') + '?id=' + item.id, function (html) {
                 layer.open({
-                    area: ['auto', '500px'],
+                    area: ['800px', '450px'],
                     type: 1,
                     content: html
                 });
             });
         });
-        var timer = 1;
+
+//        点击搜索框后隐藏指定项工具按钮
         $(".panel-heading").on('click', '#a-searchInput', function () {
-            //隐藏指定项工具按钮
+
             $(".a-item-tool-btns").hide();
         });
+
         //搜索功能
+        var timer = 1;
         $(".panel-heading").on('keyup', '#a-searchInput', function () {
             var that = $(this);
 
@@ -245,20 +253,30 @@
             $('.a-body > div').hide();
             //取消gird 行选中
             $("#a-grid tr").removeClass('k-state-selected');
-            //clean 传递参数
-            $('.a-edit').attr('params', '');
-            $('.a-remove').attr('params', '');
+
             //显示对应视图
             if (view == 'grid') {
+                cleanParams();
                 $("#a-grid").show();
             } else if (view == 'add') {
+                cleanParams();
+                //不清空upload js出问题
+                $("#a-edit-view").empty();
                 $("#a-add-view").show();
             } else if (view == 'edit') {
+                $("#a-add-view").empty();
                 $("#a-edit-view").show();
             }
+
         }
 
-//        列表
+        //clean 传递特定项参数
+        function cleanParams() {
+            $('.a-edit').attr('params', '');
+            $('.a-remove').attr('params', '');
+        }
+
+//       列表
         $(".panel-heading").on('click', '.a-list', function () {
 
             //隐藏指定项工具按钮
@@ -284,6 +302,7 @@
             //判断是否选中了一行
             var $tr = $("#a-grid tr.k-state-selected").eq(0);
             var item = grid.dataItem($tr);
+
             if (item) {
                 $(this).attr('params', 'id=' + item.id);
                 viewSwitch('edit');
