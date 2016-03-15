@@ -32,8 +32,7 @@ class PayModeController extends BaseController
         $total = $payModeService->count();
         $this->ajaxData([
             'data' => $payModeList,
-            'total' => 20,
-            'sort'  =>  $sort
+            'total' => $total
         ]);
     }
 
