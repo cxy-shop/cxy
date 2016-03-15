@@ -128,7 +128,21 @@
         .t-side-right {
             padding-right: 10px;
         }
+        .t-side-right i{
+            -webkit-transition: all 0.5s ease-in-out 0s;
+            -moz-transition: all 0.5s ease-in-out 0s;
+            -ms-transition: all 0.5s ease-in-out 0s;
+            -o-transition: all 0.5s ease-in-out 0s;
+            transition: all 0.5s ease-in-out 0s;
+        }
+        .t-side-right i.active{
 
+            -webkit-transform: rotate(90deg);
+            -moz-transform: rotate(90deg);
+            -ms-transform: rotate(90deg);
+            -o-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
         .t-side > ul > li > ul > li > a {
             padding-left: 45px;
             position: relative;

@@ -8,10 +8,10 @@
             $(".t-side >ul >li >a").on('click', function () {
                 var that = $(this);
                 //修改兄弟节点的三角图标向右
-                that.parent().siblings().find('.t-side-right i').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right')
+                that.parent().siblings().find('.t-side-right i').removeClass('active')
                         .end().end().end()
                         //修改当前节点三角图标向下
-                        .find('.t-side-right i').toggleClass('glyphicon-triangle-right').toggleClass('glyphicon-triangle-bottom');
+                        .find('.t-side-right i').toggleClass('active');
 
                 //让兄弟节点展开菜单收缩
                 that.parent().siblings().find('ul').slideUp()
