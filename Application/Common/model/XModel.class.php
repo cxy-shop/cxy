@@ -8,6 +8,7 @@
 
 /**
  * 增强model类
+ * hint: 这样只能提供自动完全功能,但解决不了链式调用方法跳转问题,这个对应用层代码并无大碍
  */
 namespace Common\Model;
 
@@ -16,11 +17,19 @@ use Think\Model;
 
 class XModel extends Model
 {
+    /**
+     * 获得当前用户ID
+     * @return mixed
+     */
     protected function getCurrentUserId()
     {
         return UserModel::getUser()['id'];
     }
 
+    /**
+     * 获得系统当前datetime(Y-m-d H:i:s)格式的时间
+     * @return bool|string
+     */
     protected function getCurrentDatetime()
     {
         return date("Y-m-d H:i:s", time());
@@ -33,27 +42,87 @@ class XModel extends Model
      * @param $id
      * @return bool|mixed
      */
-    public function toTrashOrtoDelete($id){
+    public function toTrashOrtoDelete($id)
+    {
         $item = $this->field('is_del')->find($id);
         $res = true;
-        if ( isset($item['is_del']) && $item['is_del'] == 0 ){
+        if (isset($item['is_del']) && $item['is_del'] == 0) {
             $data = [
-                'is_del'    =>  1
+                'is_del' => 1
             ];
             $res = $this->where('id=' . $id)->data($data)->save();
-        }else{
+        } else {
             $res = $this->where('id=' . $id)->limit(1)->delete();
         }
         return $res;
     }
+
+    /**
+     * 组合filters数组信息后进行where
+     * @param $filters
+     * @return $this
+     */
+    public function combosWhere($filters)
+    {
+
+        $where = [];
+        if ( !empty($filters) ) {
+            $logic = 'and';
+            if( isset($filters['filters']) ){
+                $logic = $filters['logic'];
+                $filters = $filters['filters'];
+            }
+            foreach ($filters as $filter) {
+
+                if (!empty($this->_map)) {
+                    foreach ($this->_map as $key => $val) {
+                        if ($filter['field'] == $key) {
+                            $filter['field'] = $val;
+                        }
+                    }
+                }
+                if (isset($filter['operator'])) {
+                    switch ($filter['operator']) {
+                        case 'startswith':
+                            $where[ $filter['field'] ] = ['LIKE', $filter['value'] . '%'];
+                            break;
+                    }
+                } else {
+                    $where[ $filter['field'] ] = ['eq', $filter['value']];
+                }
+            }
+        }
+        $this->where($where);
+        return $this;
+    }
+
     /**
      * 以下是为了支持IDE方法自动提示而编写的方法
      * 'strict','order','alias','having','group','lock','distinct','auto','filter','validate','result','token','index','force'
      * 'count','sum','min','max','avg'
+     * @param $arg
+     * @return $this
      */
-    public function order()
+    public function order($arg)
     {
-        parent::order(func_get_args());
+        $order = $arg;
+        if (is_array($arg)) {
+            foreach ($arg as &$sort) {
+                if (!empty($this->_map)) {
+                    foreach ($this->_map as $key => $val) {
+                        if ($sort['field'] == $key) {
+                            $sort['field'] = $val;
+                        }
+                    }
+                }
+            }
+            foreach ($arg as $sort) {
+                $tmp[] = $sort['field'] . ' ' . $sort['dir'];
+            }
+            $order = '';
+            $order .= implode(',', $tmp);
+        }
+        parent::order($order);
         return $this;
     }
 
@@ -138,9 +207,9 @@ class XModel extends Model
     public function count()
     {
         $args = func_get_args();
-        if (count($args) < 1){
+        if (count($args) < 1) {
             return parent::count();
-        }else{
+        } else {
             return parent::count(func_get_arg(0));
         }
 

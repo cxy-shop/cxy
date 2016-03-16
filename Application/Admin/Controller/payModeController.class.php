@@ -22,13 +22,18 @@ class PayModeController extends BaseController
      */
     public function getPayList()
     {
-        $filter = I('filter',[]);
-        $sort = I('sort',[]);
-        $search = I('search');
+        $filters = I('filter',[]);   //过滤参数数组
+        $sorts = I('sort',[
+            [
+                'field' => 'name',
+                'dir' =>  'asc'
+            ]
+        ]);   //排序参数数组,需要设置默认排序字段
+        $page = I('page', 1);
+        $pageSize = I('pageSize', 10);
 
-        $where = ['is_del'   =>  0];
         $payModeService = new PayModeModel();
-        $payModeList = $payModeService->where($where)->page(1, 10)->select();
+        $payModeList = $payModeService->combosWhere($filters)->order($sorts)->page(1, 10)->select();
         $total = $payModeService->count();
         $this->ajaxData([
             'data' => $payModeList,
@@ -42,8 +47,8 @@ class PayModeController extends BaseController
     public function item()
     {
         $id = I('id',0);
-        $PayModeService = new PayModeModel();
-        $payMode = $PayModeService->find($id);
+        $payModeService = new PayModeModel();
+        $payMode = $payModeService->find($id);
         $this->assign('payMode', $payMode);
         $this->display();
     }
@@ -65,7 +70,7 @@ class PayModeController extends BaseController
 
         $res = true;
         $res = $payModeService->create();
-
+        $payModeService->enable = I('enable', 0);
         if ( $res ){
             $res = $payModeService->add();
         }
@@ -88,8 +93,8 @@ class PayModeController extends BaseController
     public function edit()
     {
         $id = I('id', 0);
-        $PayModeService = new PayModeModel();
-        $payMode = $PayModeService->find($id);
+        $payModeService = new PayModeModel();
+        $payMode = $payModeService->find($id);
         $this->assign('payMode', $payMode);
         $this->display();
     }
@@ -102,10 +107,11 @@ class PayModeController extends BaseController
     {
         $oldLogoPath = I('oldLogoPath', '');
         $newLogoPath = I('logoPath', '');
-        $PayModeService = new PayModeModel();
-        $res = $PayModeService->create();
+        $payModeService = new PayModeModel();
+        $res = $payModeService->create();
+        $payModeService->enable = I('enable', 0);
         if ($res){
-            $res = $PayModeService->save();
+            $res = $payModeService->save();
         }
         if ($res){
             if($oldLogoPath != $newLogoPath){
@@ -145,6 +151,24 @@ class PayModeController extends BaseController
 
     }
 
+    /**
+     * 切换启用状态
+     */
+    public function toggleEnable(){
+        $id = I('id', 0);
+        $enable = I('enable', 0);
+        $payModelService = new PayModeModel();
+        $data = [
+            'id'  =>  $id,
+            'enable'    =>  $enable
+        ];
+        $res = $payModelService->save($data);
+        if ($res){
+            $this->ajaxSuccess();
+        }else{
+            $this->ajaxFail();
+        }
+    }
     /**
      * 上传logo处理
      */

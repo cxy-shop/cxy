@@ -51,6 +51,7 @@
     .a-item {
         display: none;
     }
+
 </style>
 <div class="a-wrap">
     <div class="a-nav">
@@ -130,9 +131,9 @@
                     }
                 }
             },
-            filter: {
-                field: "isDel", value: '0'  //没删除的记录
-            },
+            filter: [{
+                field: "isDel", value: 0  //没删除的记录
+            }],
             schema: {
                 data: function (response) {
                     return response.data;
@@ -152,7 +153,7 @@
             columns: [{
                 headerTemplate: "<label><input type='checkbox' value='#:id#' >全选</label>",
                 field: "id",
-                template: "<input type='checkbox' >",
+                template: "<input type='checkbox'  >",
                 sortable: false,
 //                filterable : false,
 //                columns : false,
@@ -173,7 +174,7 @@
                 title: "描述",
                 sortable: false
             }, {
-                template: "<label><input type='checkbox' #if( enable == 1 ) {# checked #}# ></label>",
+                template: "<label><input type='checkbox' class='a-check-enable' #if( enable == 1 ) {# checked #}# ></label>",
                 field: "enable",
                 title: "启用",
                 sortable: false
@@ -226,31 +227,13 @@
             });
         });
 
-//        点击搜索框后隐藏指定项工具按钮
-        $(".panel-heading").on('click', '#a-searchInput', function () {
-
-            $(".a-item-tool-btns").hide();
-        });
-
-        //搜索功能
-        var timer = 1;
-        $(".panel-heading").on('keyup', '#a-searchInput', function () {
-            var that = $(this);
-
-            clearTimeout(timer);
-            timer = setTimeout(function () {
-                clearTimeout(timer);
-                sharableDataSource.query({
-                    search: that.val()
-                });
-            }, 600);
-
-        });
 
         //视图切换
         function viewSwitch(view) {
             //先隐藏所有视图
             $('.a-body > div').hide();
+            //清空搜索框
+            $("#a-searchInput").val('');
             //取消gird 行选中
             $("#a-grid tr").removeClass('k-state-selected');
 
@@ -283,10 +266,61 @@
             $(".a-item-tool-btns").hide();
             viewSwitch('grid');
             sharableDataSource.read({
-                filter: {
-                    field: "isDel", value: '0'
-                }
+                filter: [
+                    {
+                        field: "isDel", value: 0
+                    }
+                ]
             });
+        });
+
+        //回收站
+        $(".panel-heading").on('click', '.a-trash', function () {
+            //隐藏指定项工具按钮
+            $(".a-item-tool-btns").hide();
+            viewSwitch('grid');
+            sharableDataSource.read({
+                filter: [
+                    {
+                        field: "isDel", value: 1
+                    }
+                ]
+            });
+        });
+
+//        点击搜索框后隐藏指定项工具按钮
+        $(".panel-heading").on('click', '#a-searchInput', function () {
+            $(".a-item-tool-btns").hide();
+        });
+
+        //搜索功能
+        var timer = 1;
+        $(".panel-heading").on('keyup', '#a-searchInput', function () {
+            var that = $(this);
+
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                clearTimeout(timer);
+                var filter;
+                if( $(".a-trash").hasClass('active') ){
+                    filter =  {
+                        field: "isDel", value: 1
+                    };
+                }else{
+                    filter =  {
+                        field: "isDel", value: 0
+                    };
+                }
+                sharableDataSource.read({
+                    filter: [
+                        filter,
+                        {
+                            field: "name", value: $.trim( that.val() ),operator: "startswith"
+                        }
+                    ]
+                });
+            }, 600);
+
         });
 
         //add
@@ -335,18 +369,22 @@
             return false;
         });
 
-        //回收站
-        $(".panel-heading").on('click', '.a-trash', function () {
-            //隐藏指定项工具按钮
-            $(".a-item-tool-btns").hide();
-            viewSwitch('grid');
-            sharableDataSource.read({
-                filter: {
-                    field: "isDel", value: '1'
-                }
-            });
-        });
+        //开启/不开启
+        $("#a-grid").on('click', '.a-check-enable', function () {
+            var that = $(this);
+            var tr = that.closest('tr');
+            var item = grid.dataItem(tr);
+            var enable;
+            console.log(that.prop('checked') + item.id);
+            if (that.prop('checked') == true) {
+                enable = 1;
+            } else {
+                enable = 0;
+            }
+            $.post('/Admin/payMode/toggleEnable', {id: item.id, enable: enable}, function (obj) {
 
+            })
+        });
 
     });
 
