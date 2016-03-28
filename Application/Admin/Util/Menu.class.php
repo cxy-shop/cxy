@@ -38,6 +38,10 @@ class Menu
                 [
                     'title' => '支付方式管理',
                     'url' => '/admin/payMode/index'
+                ],
+                [
+                    'title' => '店面信息管理',
+                    'url' => '/admin/store/index'
                 ]
             ]
         ],
@@ -46,15 +50,43 @@ class Menu
             'iconClass' => 'glyphicon glyphicon-modal-window',
             'items' => [
                 [
-                    'title' => '首页管理',
+                    'title' => '网站配置',
                     'url' => ''
                 ],
                 [
-                    'title' => '导航管理',
+                    'title' => '栏目管理',
                     'url' => ''
                 ],
                 [
-                    'title' => '板块管理',
+                    'title' => '文章管理',
+                    'url' => ''
+                ]
+            ]
+        ],
+        [
+            'title' => '订单管理',
+            'iconClass' => 'glyphicon glyphicon-user',
+            'items' => [
+                [
+                    'title' => '销售订单管理',
+                    'url' => ''
+                ],
+                [
+                    'title' => '采购订单管理',
+                    'url' => ''
+                ]
+            ]
+        ],
+        [
+            'title' => '仓库管理',
+            'iconClass' => 'glyphicon glyphicon-user',
+            'items' => [
+                [
+                    'title' => '销售订单管理',
+                    'url' => ''
+                ],
+                [
+                    'title' => '采购订单管理',
                     'url' => ''
                 ]
             ]
@@ -70,10 +102,63 @@ class Menu
             ]
         ],
         [
+            'title' => '网站促销',
+            'iconClass' => 'glyphicon glyphicon-user',
+            'items' => [
+                [
+                    'title' => ' 促销规则',
+                    'url' => ''
+                ],
+                [
+                    'title' => ' 促销活动',
+                    'url' => ''
+                ]
+            ]
+        ],
+        [
+            'title' => '网站客服',
+            'iconClass' => 'glyphicon glyphicon-user',
+            'items' => [
+                [
+                    'title' => ' 投诉建议',
+                    'url' => ''
+                ]
+            ]
+        ],
+        [
+            'title' => ' 组织架构',
+            'iconClass' => 'glyphicon glyphicon-user',
+            'items' => [
+                [
+                    'title' => '人员管理',
+                    'url' => ''
+                ],
+                [
+                    'title' => '部门管理',
+                    'url' => ''
+                ],
+                [
+                    'title' => '职位管理',
+                    'url' => ''
+                ]
+            ]
+        ],
+        [
             'title' => '系统设置',
             'iconClass' => 'glyphicon glyphicon-cog',
             'items' => [
-
+                [
+                    'title' => '系统配置',
+                    'url' => ''
+                ],
+                [
+                    'title' => '权限管理',
+                    'url' => ''
+                ],
+                [
+                    'title' => '业务流程管理',
+                    'url' => ''
+                ]
             ]
         ]
 
