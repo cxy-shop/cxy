@@ -356,7 +356,20 @@
 
                     $.post(that.attr('href'), 'id=' + item.id, function (obj) {
                         if (obj.success == 1) {
-                            sharableDataSource.read();
+                            if( $(".a-trash").hasClass('active') ){
+                                filter =  {
+                                    field: "isDel", value: 1
+                                };
+                            }else{
+                                filter =  {
+                                    field: "isDel", value: 0
+                                };
+                            }
+                            sharableDataSource.read({
+                                filter: [
+                                    filter
+                                ]
+                            });
                         } else {
                             layer.msg(obj.msg);
                         }
@@ -375,7 +388,6 @@
             var tr = that.closest('tr');
             var item = grid.dataItem(tr);
             var enable;
-            console.log(that.prop('checked') + item.id);
             if (that.prop('checked') == true) {
                 enable = 1;
             } else {
