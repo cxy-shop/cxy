@@ -103,10 +103,19 @@ class XModel extends Model
      * @param $arg
      * @return $this
      */
+
+    /**
+     * 增强order, 支持sort数组格式
+     * @param $arg
+     * @return $this
+     */
     public function order($arg)
     {
         $order = $arg;
         if (is_array($arg)) {
+            /**
+             * 进行字段映射转换
+             */
             foreach ($arg as &$sort) {
                 if (!empty($this->_map)) {
                     foreach ($this->_map as $key => $val) {
@@ -116,13 +125,18 @@ class XModel extends Model
                     }
                 }
             }
+            /**
+             * 连接成 字段 asc/desc,...形式
+             */
             foreach ($arg as $sort) {
                 $tmp[] = $sort['field'] . ' ' . $sort['dir'];
             }
             $order = '';
             $order .= implode(',', $tmp);
         }
-        parent::order($order);
+        if ( !empty($order) ){
+            parent::order($order);
+        }
         return $this;
     }
 
