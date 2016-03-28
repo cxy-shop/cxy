@@ -1,0 +1,211 @@
+<style>
+    #b-image-img {
+        max-width: 200px;
+        max-height: 40px;
+    }
+
+    .row {
+        margin-top: 10px;
+    }
+
+    @media (min-width: 992px) {
+        .col-md-offset-2 {
+            margin-left: 0%;
+        }
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <block name="form"></block>
+        <div class="form-group">
+            <label for="b-parent" class="col-sm-3 control-label" required>父级名称</label>
+            <div class="col-sm-7">
+                <block name="parent"></block>
+            </div>
+        </div>
+        <div class="form-group">
+
+            <label for="b-name" class="col-sm-3 control-label" required>名称</label>
+            <div class="col-sm-7">
+                <block name="name"></block>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="b-encode" class="col-sm-3 control-label" >编码</label>
+            <div class="col-sm-7">
+                <block name="encode"></block>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="b-unit" class="col-sm-3 control-label" >单位</label>
+            <div class="col-sm-7">
+                <block name="unit"></block>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="b-remark" class="col-sm-3 control-label">描述</label>
+            <div class="col-sm-7">
+                <block name="remark"></block>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="b-logo-file" class="col-sm-3 control-label">图标</label>
+            <div class="col-sm-7">
+                <block name="file"></block>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="b-enable" class="col-sm-3 control-label">启用</label>
+            <div class="col-sm-7">
+                <block name="enable"></block>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-7">
+                <block name="submit"></block>
+            </div>
+        </div>
+        <div id="a-dialog"></div>
+        </form>
+    </div>
+</div>
+
+<block name="js">
+    <literal>
+        <script>
+            $(function () {
+                var win = window;
+                //       logo文件上传 start
+                var update = $("#b-image-file").kendoUpload({
+                    async: {
+                        saveUrl: "/admin/upload/uploadImage",
+                        removeUrl: "/admin/upload/removeUploadImage",
+                        autoUpload: false
+                    },
+                    upload: onUpload,   //上传前做些操作
+                    success: onSuccess, //上传成功时的操作
+                    remove: onRemove,   //移除文件前操作
+                    error: onError,      //上传失败时操作
+                    multiple: false
+                }).data("kendoUpload");
+
+                function onUpload(e) {
+                    var files = e.files;
+                    $.each(files, function () {
+                        //判断文件类型是否合法
+                        var extension = this.extension.toLowerCase();
+                        if (-1 === $.inArray(extension, ['.jpg', '.gif', '.png', '.jpeg'])) {
+                            layer.msg('文件格式不对,只允许jpg,gif,png,jpeg为后缀的图片!');
+                            e.preventDefault();
+                        }
+                        //TODO 还需要检测文件大小是否合法
+                    });
+                }
+
+                function onSuccess(e) {
+                    var files = e.files;
+                    if (e.operation == "upload") {
+                        var response = e.response;
+                        if (response.success == 1) {
+                            console.log(e.files);
+                            var path = response.data[0].path;
+                            //修改上传字段值
+                            $("#b-image-path").val(path);
+                            //修改文件名为服务器存储文件名
+                            e.files[0].name = path;
+                            //设置缩略图
+                            $("#b-image-img").attr('src', '/Static/tmp/' + response.data[0].path).show();
+                        }
+                    } else if (e.operation == "remove") {
+                        //删除缩略图
+                        $("#b-image-img").hide().attr('src', '');
+                        //重置上传字段值
+                        $("#b-image-path").val('');
+                    }
+                }
+
+                function onRemove(e) {
+                    var files = e.files;
+                    console.log(files[0].name);
+                }
+
+                function onError() {
+                    layer.msg('操作失败!');
+                }
+                //      logo文件上传 end
+
+                //        表单提交
+                $("#b-add-form").submit(function () {
+                    var that = $(this);
+                    //TODO 提交前验证表单
+
+                    var action = that.attr('action');
+                    var submitBtn = that.find('[type=submit]');
+
+                    submitBtn.prop('disabled', true);
+                    $.post(action, that.serialize(), function (obj) {
+                        if (obj.success == 1) {
+                            layer.msg(obj.msg);
+                            //把新增的分类添加到树形菜单
+                            win.treeview.append({ text: "baz" }, win.targetCate);
+                        }
+                    }).always(function () {
+                        submitBtn.prop('disabled', false);
+                    });
+                    return false;
+                });
+
+                //弹出单位列表窗口 start
+                var dialog = null;
+                dialog = $("#a-dialog").kendoWindow({
+                    title: '单位列表',
+                    appendTo: "form",
+                    position: {
+                        top: '205px',
+                        left: '191px'
+                    },
+                    visible: false,
+                    resizable: false,
+                    content: '/admin/productCate/unit'
+                }).data("kendoWindow");
+                //绑定确认点击事件,获取窗口内的选中元素,并提取id和文本描述
+                dialog.wrapper.on('click','#c-confirm', function () {
+                    var units = dialog.wrapper.find('input[type=checkbox]:checked');
+                    console.log(units);
+                    var unitInput = '';
+                    var unitIds = '';
+                    units.each(function () {
+                        unitInput += $(this).val() + ',';
+                        unitIds += $(this).attr('unit-id') + ',';
+                    });
+                    if (unitInput.lastIndexOf(',') == unitInput.length-1){
+                        unitInput = unitInput.substr(0, unitInput.length-1);
+                    }
+                    $("#b-unit").val(unitInput);
+                    $("#b-unitIds").val(unitIds);
+                    dialog.close();
+                });
+                //绑定取消事件,关闭窗口
+                dialog.wrapper.on('click','#c-cancel', function () {
+                    dialog.close();
+                });
+                //绑定单位聚焦事件,显示窗口
+                $("#b-unit").on('focus', function () {
+                    //重定位
+                    dialog.setOptions({
+                        position: {
+                            top: '205px',
+                            left: '191px'
+                        }
+                    });
+                    dialog.open();
+                });
+                //弹出单位列表窗口 end
+
+            })
+        </script>
+
+
+    </literal>
+</block>
