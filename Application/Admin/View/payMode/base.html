@@ -47,8 +47,8 @@
             //       logo文件上传 start
             var update = $("#b-logo-file").kendoUpload({
                 async: {
-                    saveUrl: "/admin/payMode/uploadLogo",
-                    removeUrl: "/admin/payMode/removeUploadLogo",
+                    saveUrl: "/admin/Upload/uploadImage",
+                    removeUrl: "/admin/Upload/removeUploadImage",
                     autoUpload: false
                 },
                 upload: onUpload,   //上传前做些操作
