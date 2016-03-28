@@ -1,5 +1,5 @@
 <?php
-namespace Common\Controller;
+namespace Admin\Controller;
 
 use Admin\Model\UserModel;
 use Think\Controller;
