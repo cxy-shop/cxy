@@ -7,7 +7,7 @@
  */
 namespace Admin\Model;
 use Common\Model\XModel;
-use Think\Model;
+
 class PayModeModel extends XModel
 {
     // 把表单字段映射到数据表的字段
