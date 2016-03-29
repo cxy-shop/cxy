@@ -1,0 +1,48 @@
+<style>
+    #dialog-footer{
+     position: absolute;
+        bottom: 0;
+        left:0;
+        right:0;
+        width: 100%;
+        height:35px;
+    }
+    fieldset {
+        margin: 10px;
+        padding: 0px 15px;
+        border: 1px solid #CCC;
+        font-weight: bold;
+    }
+    legend {
+        width: auto;
+        border:none;
+        margin-bottom: 0px;
+    }
+    fieldset label {
+        display: inline-block;
+        padding: 0 10px;
+        margin: 8px 5px 5px 0;
+        line-height: 21px;
+        background: #EEE;
+        border-radius: 0;
+    }
+    #dialog-content{
+        margin-bottom: 35px;
+    }
+</style>
+<div id="dialog-content" >
+    <fieldset>
+        <legend>数量组</legend>
+        <label><input type="checkbox" name="unit" unit-id="3" value="件" class="pointer">件</label>
+        <label><input type="checkbox" name="unit" unit-id="1" value="双" class="pointer">双</label>
+        <label><input type="checkbox" name="unit" unit-id="6" value="套" class="pointer">套</label>
+        <label><input type="checkbox" name="unit" unit-id="7" value="盒" class="pointer">盒</label>
+        <label><input type="checkbox" name="unit" unit-id="8" value="把" class="pointer">把</label>
+        <label><input type="checkbox" name="unit" unit-id="9" value="只" class="pointer">只</label>
+        <label><input type="checkbox" name="unit" unit-id="10" value="个" class="pointer">个</label>
+        <label><input type="checkbox" name="unit" unit-id="11" value="箱" class="pointer">箱</label><label><input type="checkbox" name="unit" unitsid="12" value="罐" class="pointer">罐</label><label><input type="checkbox" name="unit" unitsid="13" value="瓶" class="pointer">瓶</label><label><input type="checkbox" name="unit" unitsid="14" value="包" class="pointer">包</label><label><input type="checkbox" name="unit" unitsid="15" value="袋" class="pointer">袋</label><label><input type="checkbox" name="unit" unitsid="16" value="条" class="pointer">条</label><label><input type="checkbox" name="unit" unitsid="17" value="台" class="pointer">台</label><label><input type="checkbox" name="unit" unitsid="21" value="幅" class="pointer">幅</label><label><input type="checkbox" name="unit" unitsid="22" value="盏" class="pointer">盏</label><label><input type="checkbox" name="unit" unitsid="23" value="扎" class="pointer">扎</label><label><input type="checkbox" name="unit" unitsid="26" value="包" class="pointer">包</label><label><input type="checkbox" name="unit" unitsid="27" value="卷" class="pointer">卷</label><label><input type="checkbox" name="unit" unitsid="28" value="对" class="pointer">对</label><label><input type="checkbox" name="unit" unitsid="29" value="桶" class="pointer">桶</label></fieldset><fieldset><legend>重量组</legend><label><input type="checkbox" name="unit" unitsid="2" value="千克" class="pointer">千克</label><label><input type="checkbox" name="unit" unitsid="5" value="克" class="pointer">克</label><label><input type="checkbox" name="unit" unitsid="24" value="市斤" class="pointer">市斤</label><label><input type="checkbox" name="unit" unitsid="25" value="公斤" class="pointer">公斤</label></fieldset><fieldset><legend>尺寸组</legend><label><input type="checkbox" name="unit" unitsid="20" value="毫米" class="pointer">毫米</label><label><input type="checkbox" name="unit" unitsid="19" value="厘米(公分)" class="pointer">厘米(公分)</label><label><input type="checkbox" name="unit" unitsid="18" value="米" class="pointer">米</label></fieldset></div>
+
+<div id="dialog-footer" class="k-header">
+    <input type="button" id="c-confirm" class="btn btn-primary pull-right" value="确认">
+    <input type="button" id="c-cancel" class="btn btn-default pull-right" value="取消">
+</div>

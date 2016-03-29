@@ -147,8 +147,18 @@
                     $.post(action, that.serialize(), function (obj) {
                         if (obj.success == 1) {
                             layer.msg(obj.msg);
-                            //把新增的分类添加到树形菜单
-                            win.treeview.append({ text: "baz" }, win.targetCate);
+                            // 这里得区分新增还是编辑,编辑是替换节点,新增是添加节点
+                            var item = $("input[name=id]");
+                            if ( item.length ==0){
+                                //把新增的分类添加到树形菜单
+                                win.treeview.append({ 'text': obj.data.name, 'id' : obj.data.id }, treeview.findByUid(win.targetCate.uid));
+                            }else{
+                                //编辑替换节点
+                                win.treeview.insertAfter({ 'text': $("#b-name").val(), 'id' : item.eq(0).val() }, treeview.findByUid(win.targetCate.uid));
+                                treeview.remove(treeview.findByUid(win.targetCate.uid));
+                                win.targetCate = null;
+                            }
+
                         }
                     }).always(function () {
                         submitBtn.prop('disabled', false);

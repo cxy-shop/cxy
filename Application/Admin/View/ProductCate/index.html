@@ -1,0 +1,128 @@
+<style>
+    #a-splitter {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 100%;
+        border: none;
+    }
+</style>
+<div id="a-splitter">
+    <div>
+        <div id="a-toolbar-resizable"></div>
+        <div id="a-treeview"></div>
+    </div>
+    <div id="a-pane"></div>
+</div>
+<script>
+    $(function () {
+        var win = window;
+        //分割页面
+        $("#a-splitter").kendoSplitter({
+            panes: [{collapsible: true, size: "240px"}, {contentUrl: '/admin/productCate/remark'}]
+        });
+        var splitter = $("#a-splitter").data("kendoSplitter");
+
+        //树形菜单远程数据源
+        win.treeViewdataSource = new kendo.data.HierarchicalDataSource({
+            transport: {
+                read: {
+                    url: "/admin/productCate/getList",
+                    dataType: "json"
+                }
+            },
+            schema: {
+                model: {
+                    id: "id",
+                    children: 'items'
+                }
+            }
+        });
+
+        //树形菜单
+        win.treeview = $("#a-treeview").kendoTreeView({
+//            dataImageUrlField: 'icon',
+            dataSource: treeViewdataSource,
+            select: function(e) {
+                win.targetCate = treeview.dataItem(e.node);
+            }
+        }).data("kendoTreeView");
+        //展开分类
+        treeViewdataSource.read().promise().then(function () {
+            treeview.expand(".k-item");
+        });
+        //工具条
+        $("#a-toolbar-resizable").kendoToolBar({
+            items: [
+                {
+                    type: "buttonGroup", buttons: [
+                    {type: "button", icon: "group",  click: onList},
+                    {type: "button", icon: "plus",  click: onAdd},
+                    {type: "button", icon: "pencil",  click: onEdit},
+                    {type: "button", icon: "close",  click: onDelete}
+                ]
+                }, {
+                    type: "button", icon: "refresh", click: onRefresh,attributes: { "class": "pull-right","style" :"position:relative;top:6px;right:-15px" }
+                }
+            ]
+        });
+
+        //工具按钮回调函数
+        function onList() {
+            splitter.ajaxRequest("#a-pane", "/admin/productCate/remark?v=" + Math.random());
+        }
+        //新增分类
+        function onAdd() {
+            if (targetCate) {
+                splitter.ajaxRequest("#a-pane", "/admin/productCate/add?v=" + Math.random(), {parentId: targetCate.id});
+            } else {
+                layer.msg('你需要选择一项');
+            }
+        }
+        //编辑分类
+        function onEdit() {
+            if (targetCate) {
+                if (0 == targetCate.id) {
+                    layer.msg('请选择具体分类');
+                } else {
+                    splitter.ajaxRequest("#a-pane", "/admin/productCate/edit?v=" + Math.random(), {id: targetCate.id});
+                }
+            } else {
+                layer.msg('你需要选择一项');
+            }
+        }
+        //删除分类及其子分类
+        function onDelete() {
+            var dataItem = treeview.dataItem(treeview.select());
+            if (dataItem) {
+                if (0 == dataItem.id) {
+                    layer.msg('请选择具体分类');
+                } else {
+                    layer.confirm('是否删除分类及其子分类?', {icon: 3, title: '提示'}, function (index) {
+                        $.post('/admin/productCate/removeHandle', 'id=' + dataItem.id, function (obj) {
+                            if (obj.success == 1) {
+                                //从树形菜单中删除对应分类
+                                treeview.remove(treeview.findByText(dataItem.text));
+                            } else {
+                                layer.msg(obj.msg);
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            } else {
+                layer.msg('你需要选择一项');
+            }
+        }
+        //刷新分类菜单
+        function onRefresh(){
+            treeViewdataSource.read().promise().then(function () {
+                treeview.expand(".k-item");
+            });
+
+        }
+
+    });
+</script>
