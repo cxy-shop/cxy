@@ -2,7 +2,6 @@
 namespace Admin\Controller;
 
 use Admin\Model\UserModel;
-use Common\Controller\BaseController;
 
 class SystemController extends BaseController
 {
