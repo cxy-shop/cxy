@@ -1,0 +1,37 @@
+<div id="a-treeList"></div>
+
+<script>
+    var dataSource  = new kendo.data.TreeListDataSource({
+//        offlineStorage: "products-offline",
+        transport: {
+            read: {
+                url: "/admin/productUnit/getList",
+                dataType: "json"
+            }
+        }
+    });
+//    dataSource.online(false);
+//    console.log(dataSource.online()); // displays "false"
+//    console.log(index); // displays "0"
+    var treeList = $("#a-treeList").kendoTreeList({
+        columns: [
+            {field: "name"},
+            {field: "age"}
+        ],
+        columnMenu: false,
+        resizable: true,
+        sortable: true,
+        selectable: true,
+        scrollable : false,
+        dataSource: dataSource
+    }).data('kendoTreeList');
+
+//    setTimeout(function () {
+//        dataSource.pushCreate([
+//            { id: 11, name: "John Doe",age:22,parentId:null },
+//            { id: 21, name: "Jane Doe",age:22,parentId:1 }
+//        ]);
+//        var dataItem = dataSource.insert(0, { name: "John Doe" });
+//        treeList.refresh();
+//    },2000);
+</script>

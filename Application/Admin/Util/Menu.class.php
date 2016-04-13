@@ -51,7 +51,7 @@ class Menu
             'items' => [
                 [
                     'title' => '网站配置',
-                    'url' => ''
+                    'url' => '/admin/website/index'
                 ],
                 [
                     'title' => '栏目管理',

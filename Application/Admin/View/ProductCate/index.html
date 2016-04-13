@@ -47,12 +47,17 @@
             dataSource: treeViewdataSource,
             select: function(e) {
                 win.targetCate = treeview.dataItem(e.node);
-            }
+            },
+//            dragAndDrop: true,
+//            drop: function(e) {
+//                console.log("Drag",treeview.dataItem( e.sourceNode).text, "over",treeview.dataItem( e.dropTarget).text);
+//                e.setValid(false);
+//            }
         }).data("kendoTreeView");
         //展开分类
-        treeViewdataSource.read().promise().then(function () {
-            treeview.expand(".k-item");
-        });
+//        treeViewdataSource.read().promise().then(function () {
+//            treeview.expand(".k-item");
+//        });
         //工具条
         $("#a-toolbar-resizable").kendoToolBar({
             items: [

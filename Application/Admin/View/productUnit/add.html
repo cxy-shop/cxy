@@ -1,0 +1,44 @@
+<extend name="ProductCate:base"/>
+
+<block name="form">
+    <form id="b-add-form" class="col-md-8 col-md-offset-2 form-horizontal" action="/admin/productCate/addHandle"
+          method="post">
+</block>
+
+<block name="parent">
+    <input type="text" class="form-control" id="b-parent" name="parent" required readonly value="{$parentName}">
+    <input type="hidden" id="b-parentId" name="parentId"  value="{$parentId}">
+</block>
+
+<block name="name">
+    <input type="text" class="form-control" id="b-name" name="name" required placeholder="分类名称">
+</block>
+
+<block name="encode">
+    <input type="text" class="form-control" id="b-encode" name="encode" placeholder="分类编码">
+</block>
+
+<block name="unit">
+    <input type="text" class="form-control" id="b-unit" name="unitSet" placeholder="分类可能用到的单位">
+    <input type="hidden"  id="b-unitIds" name="unitIds" >
+</block>
+
+<block name="remark">
+    <textarea class="form-control" name="remark" id="b-remark" cols="30"
+              rows="10" placeholder="分类的描述"></textarea>
+</block>
+
+<block name="file">
+    <input type="file" id="b-image-file" name="file">
+    <img src="" id="b-image-img">
+    <input type="hidden" id="b-image-path" name="iconPath">
+</block>
+
+<block name="enable">
+    <input type="checkbox" class="form-control" id="b-enable" name="enable" value="1" checked>
+</block>
+
+<block name="submit">
+    <button type="submit" class="btn btn-default">提交</button>
+</block>
+

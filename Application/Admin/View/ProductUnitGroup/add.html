@@ -1,0 +1,21 @@
+<extend name="ProductUnitGroup:base"/>
+
+<block name="form">
+    <form id="b-add-form" class="col-md-8 col-md-offset-2 form-horizontal" action="/admin/productUnitGroup/addHandle"
+          method="post">
+</block>
+
+<block name="name">
+    <input type="text" class="form-control" id="b-name" name="name" required placeholder="分组名称">
+</block>
+
+
+<block name="remark">
+    <textarea class="form-control" name="remark" id="b-remark" cols="30"
+              rows="10" placeholder="描述内容"></textarea>
+</block>
+
+<block name="submit">
+    <button type="submit" class="btn btn-primary">新建</button>
+</block>
+
