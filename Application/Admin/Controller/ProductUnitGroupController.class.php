@@ -129,7 +129,6 @@ class ProductUnitGroupController extends BaseController
         $this->ajaxData($productUnitGroupList);
     }
 
-
     /**
      * 删除操作
      */

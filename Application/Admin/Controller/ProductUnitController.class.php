@@ -8,57 +8,103 @@
 
 namespace Admin\Controller;
 
+use Admin\Model\ProductUnitModel;
 
+/**
+ * 产品单位管理
+ * Class ProductUnitController
+ * @package Admin\Controller
+ */
 class ProductUnitController extends BaseController
 {
     /**
-     *  产品单位管理主界面
+     *  管理主界面
      */
     public function index()
     {
         $this->display();
     }
-
     /**
-     * 单位列表页面
+     * 介绍页面
      */
-    public function lists()
-    {
+    public function remark(){
         $this->display();
     }
 
+    /**
+     * 获取列表
+     */
     public function getList()
     {
-        $data = [
-            [
-                'text'  =>  '单位分组',
-                'id'    =>  0,
-                'items' =>  [
-                    [
-                        'text'  =>  '商品1',
-                        'id'    =>  1,
-                    ],
-                    [
-                        'text'  =>  '商品2',
-                        'id'    =>  2,
-                    ],
-                    [
-                        'text'  =>  '商品3',
-                        'id'    =>  3,
-                    ]
-                ]
-            ]
-        ];
-        $this->ajaxData($data);
+        $cateId = I('cateId',0);
+        $productUnitService = new ProductUnitModel();
+        $productUnitList = $productUnitService->scope('available')->where(['cate_id' => $cateId])->select();
+
+        $this->ajaxData($productUnitList);
     }
+
     /**
-     * 获取产品单位列表
+     * 列表页面
      */
-//    public function getList()
-//    {
-//        $productUnitService = new ProductUnitModel();
-//        $productUnitList = $productUnitService->scope('available')->select();
-//
-//        $this->ajaxData($productUnitList);
-//    }
+    public function lists()
+    {
+        $cateId = I('cateId', 0);
+        $this->assign('cateId', $cateId);
+        $this->display();
+    }
+
+    /**
+     * 新增操作
+     */
+    public function addHandle()
+    {
+        $productUnitService = new ProductUnitModel();
+
+        $res = true;
+        $res = $productUnitService->create();
+        if ($res) {
+            $res = $productUnitService->add();
+        }
+        if ($res) {
+            $this->ajaxData( $productUnitService->find($res) );
+        } else {
+            $this->ajaxFail($productUnitService->getError());
+        }
+    }
+
+    /**
+     * 编辑操作
+     */
+    public function editHandle()
+    {
+        $productUnitService = new ProductUnitModel();
+
+        $data = $productUnitService->create();
+        $res = null;
+        if ($data) {
+            $res = $productUnitService->save();
+        }
+        if ($res) {
+            $this->ajaxData($data);
+        } else {
+            $this->ajaxFail($productUnitService->getError());
+        }
+    }
+
+    /**
+     * 删除操作
+     */
+    public function removeHandle()
+    {
+        $id = I('id',0);
+        $productUnitService = new ProductUnitModel();
+
+        $res = $productUnitService->delete($id);
+        if ($res) {
+            $this->ajaxSuccess();
+        } else {
+            $this->ajaxFail($productUnitService->getError());
+        }
+    }
+
 }
