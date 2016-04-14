@@ -21,7 +21,7 @@ class BaseController extends Controller
     }
 
     /**
-     *权限检测
+     *用户权限检测
      */
     protected function _initialize()
     {

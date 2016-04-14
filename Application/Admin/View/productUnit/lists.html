@@ -1,37 +1,68 @@
-<div id="a-treeList"></div>
+<div id="a-grid"></div>
 
 <script>
-    var dataSource  = new kendo.data.TreeListDataSource({
-//        offlineStorage: "products-offline",
+    var win = window;
+//    配置数据源
+    var dataSource = new kendo.data.DataSource({
+        type:'json',
         transport: {
+            create: {
+                url: "/admin/productUnit/addHandle",
+                type: "post"
+            },
             read: {
-                url: "/admin/productUnit/getList",
-                dataType: "json"
+                url: "/admin/productUnit/getList?cateId="+'{$cateId}'
+            },
+            update: {
+                url: "/admin/productUnit/editHandle",
+                type: "post"
+            },
+            destroy: {
+                url: "/admin/productUnit/removeHandle",
+                type: "post"
+            },
+            //发送数据到服务端前的操作
+            parameterMap: function(data, type) {
+                if (type == "create") {
+                    return {
+                        name: data.models[0].name,
+                        cateId :  '{$cateId}'
+                    };
+                }
+                if (type == "destroy"){
+                    return { id: data.models[0].id };
+                }
+                if (type == "update"){
+                    return { id: data.models[0].id, name: data.models[0].name};
+                }
+                return { models: data.models };
+
+            }
+        },
+        batch: true,
+        schema: {
+            model: { id: "id" },
+            data: function(response) {
+                if (response.success == 0){
+                    dataSource.cancelChanges();
+                }
+                return response;
             }
         }
     });
-//    dataSource.online(false);
-//    console.log(dataSource.online()); // displays "false"
-//    console.log(index); // displays "0"
-    var treeList = $("#a-treeList").kendoTreeList({
+//    实例化grid
+    $("#a-grid").kendoGrid({
         columns: [
-            {field: "name"},
-            {field: "age"}
+            { field: "id", hidden:true },
+            { field: "name" },
+            { field: "cateId", hidden:true },
+            { command: ["edit", "destroy"] }
         ],
-        columnMenu: false,
-        resizable: true,
-        sortable: true,
-        selectable: true,
-        scrollable : false,
-        dataSource: dataSource
-    }).data('kendoTreeList');
-
-//    setTimeout(function () {
-//        dataSource.pushCreate([
-//            { id: 11, name: "John Doe",age:22,parentId:null },
-//            { id: 21, name: "Jane Doe",age:22,parentId:1 }
-//        ]);
-//        var dataItem = dataSource.insert(0, { name: "John Doe" });
-//        treeList.refresh();
-//    },2000);
+        dataSource: dataSource,
+        editable: {
+            mode: "inline"
+        },
+        toolbar: ["create"]
+    });
 </script>
+
