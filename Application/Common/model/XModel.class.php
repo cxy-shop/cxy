@@ -42,7 +42,7 @@ class XModel extends Model
      * @param $id
      * @return bool|mixed
      */
-    public function toTrashOrtoDelete($id)
+    public function toTrashOrDelete($id)
     {
         $item = $this->field('is_del')->find($id);
         $res = true;
@@ -64,11 +64,10 @@ class XModel extends Model
      */
     public function combosWhere($filters)
     {
-
         $where = [];
-        if ( !empty($filters) ) {
+        if (!empty($filters)) {
             $logic = 'and';
-            if( isset($filters['filters']) ){
+            if (isset($filters['filters'])) {
                 $logic = $filters['logic'];
                 $filters = $filters['filters'];
             }
@@ -84,11 +83,11 @@ class XModel extends Model
                 if (isset($filter['operator'])) {
                     switch ($filter['operator']) {
                         case 'startswith':
-                            $where[ $filter['field'] ] = ['LIKE', $filter['value'] . '%'];
+                            $where[$filter['field']] = ['LIKE', $filter['value'] . '%'];
                             break;
                     }
                 } else {
-                    $where[ $filter['field'] ] = ['eq', $filter['value']];
+                    $where[$filter['field']] = ['eq', $filter['value']];
                 }
             }
         }
@@ -134,10 +133,76 @@ class XModel extends Model
             $order = '';
             $order .= implode(',', $tmp);
         }
-        if ( !empty($order) ){
+        if (!empty($order)) {
             parent::order($order);
         }
         return $this;
+    }
+
+    /**
+     * 将获取数据的字段名转成驼峰式格式(字段反映射)
+     * @param null $arg
+     * @return array|mixed
+     */
+    public function find($arg = null)
+    {
+        $data = [];
+        $returnData = [];
+        if (empty($arg)) {
+            $data = parent::find();
+        } else {
+            $data = parent::find($arg);
+        }
+        $keys = array_keys($data);
+        foreach ($keys as $fieldName) {
+            $originFieldName = $fieldName;
+            if (!empty($this->_map)) {
+                foreach ($this->_map as $key => $val) {
+                    if ($val == $fieldName) {
+                        $fieldName = $key;
+                        break;
+                    }
+                }
+            }
+            $returnData[$fieldName] = $data[$originFieldName];
+        }
+        return $returnData;
+    }
+
+    /**
+     * 将获取数据的字段名转成驼峰式格式(字段反映射)
+     * @param null $arg
+     * @return array
+     */
+    public function select($arg = null)
+    {
+        $dataList = [];
+        $returnDataList = [];
+
+        if (empty($arg)) {
+            $dataList = parent::select();
+        } else {
+            $dataList = parent::select($arg);
+        }
+
+        foreach ($dataList as $data) {
+            $keys = array_keys($data);
+            $returnData = [];
+            foreach ($keys as $fieldName) {
+                $originFieldName = $fieldName;
+                if (!empty($this->_map)) {
+                    foreach ($this->_map as $key => $val) {
+                        if ($val == $fieldName) {
+                            $fieldName = $key;
+                            break;
+                        }
+                    }
+                }
+                $returnData[$fieldName] = $data[$originFieldName];
+            }
+            $returnDataList[] = $returnData;
+        }
+        return $returnDataList;
     }
 
     public function strict()
