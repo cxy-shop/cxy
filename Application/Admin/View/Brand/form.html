@@ -1,0 +1,111 @@
+<script id="popup-form" type="text/x-kendo-template">
+    <div class="container-fluid" style="width:600px;">
+        <div class="row">
+            <form id="b-add-form" class="col-md-8 form-horizontal" action="/admin/productCate/addHandle"
+                  method="post">
+                <div class="form-group">
+                    <label for="b-name" class="col-sm-3 control-label" required>名称</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="b-name" name="name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-code" class="col-sm-3 control-label">编码</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="b-code" name="code">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-letter" class="col-sm-3 control-label">首字母</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="b-letter" name="letter">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-intro" class="col-sm-3 control-label">简介</label>
+                    <div class="col-sm-7">
+                        <textarea id="b-intro" class="form-control" name="intro" style="width:250px;height: 120px;"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-desc" class="col-sm-3 control-label">描述</label>
+                    <div class="col-sm-7">
+                        <textarea class="form-control" name="desc" id="b-desc" style="width:620px;height: 200px;"
+                                  data-role="editor"></textarea>
+                    </div>
+                </div>
+                <div class="form-group" id="b-logo-div">
+                    <label for="b-logo-file" class="col-sm-3 control-label">logo</label>
+                    <div class="col-sm-7">
+                        <input
+                                class="form-control"
+                                id="b-logo-file"
+                                type="file"
+                                name="file"
+                                data-role="upload"
+                                data-async="{ saveUrl: '/admin/upload/uploadImage', removeUrl: '/admin/upload/removeUploadImage', autoUpload: true }"
+                                data-bind="visible: isVisible,
+                              enabled: isEnabled,
+                              events: { success: onSuccess ,select: onSelect}">
+                        <img alt="没有图片" class="medium-img" src="#=logo#">
+                        <input type="hidden" name="logo" >
+                    </div>
+                </div>
+                <div class="form-group" id="b-pc-div">
+                    <label for="b-pc-file" class="col-sm-3 control-label">pc端图片</label>
+                    <div class="col-sm-7">
+                        <input
+                                class="form-control"
+                                id="b-pc-file"
+                                type="file"
+                                name="file"
+                                data-role="upload"
+                                data-async="{ saveUrl: '/admin/upload/uploadImage', removeUrl: '/admin/upload/removeUploadImage', autoUpload: true }"
+                                data-bind="visible: isVisible,
+                              enabled: isEnabled,
+                              events: { success: onSuccess ,select: onSelect}">
+                        <img alt="没有图片" class="medium-img" src="#:pcImg#">
+                        <input type="hidden" name="pcImg" >
+                    </div>
+                </div>
+                <div class="form-group" id="b-banner-div">
+                    <label for="b-logo-file" class="col-sm-3 control-label">logo</label>
+                    <div class="col-sm-7">
+                        <input
+                                class="form-control"
+                                id="b-banner-file"
+                                type="file"
+                                name="file"
+                                data-role="upload"
+                                data-async="{ saveUrl: '/admin/upload/uploadImage', removeUrl: '/admin/upload/removeUploadImage', autoUpload: true }"
+                                data-bind="visible: isVisible,
+                              enabled: isEnabled,
+                              events: { success: onSuccess ,select: onSelect}">
+                        <img alt="没有图片" class="big-img" src="#:bannerImg#">
+                        <input type="hidden" name="bannerImg">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-recommend" class="col-sm-3 control-label"> 是否推荐</label>
+                    <div class="col-sm-7">
+                        <input type="checkbox" class="form-control" id="b-recommend" name="recommend"
+                               data-bind='checked:recommend'>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-enable" class="col-sm-3 control-label">启用</label>
+                    <div class="col-sm-7">
+                        <input type="checkbox" class="form-control" id="b-enable" name="enable"
+                               data-bind='checked:enable'>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-7">
+                        <input type="hidden" name="id">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</script>

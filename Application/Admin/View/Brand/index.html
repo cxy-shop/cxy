@@ -1,0 +1,125 @@
+<style>
+    #a-splitter {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 100%;
+        border: none;
+    }
+</style>
+<div id="a-splitter">
+    <div>
+        <div id="a-toolbar-resizable"></div>
+        <div id="a-treeview"></div>
+    </div>
+    <div id="a-pane"></div>
+</div>
+<script>
+    $(function () {
+        var win = window;
+
+        //分割页面
+        $("#a-splitter").kendoSplitter({
+            panes: [{collapsible: true, size: "240px"}, {contentUrl: '/admin/brand/remark'}]
+        });
+        var splitter = $("#a-splitter").data("kendoSplitter");
+
+        //树形菜单远程数据源
+        win.treeViewdataSource = new kendo.data.HierarchicalDataSource({
+            transport: {
+                read: {
+                    url: "/admin/brandCate/getList",
+                    dataType: "json"
+                }
+            },
+            schema: {
+                model: {
+                    id: "id",
+                    children: 'items'
+                }
+            }
+        });
+
+        //树形菜单
+        win.treeview = $("#a-treeview").kendoTreeView({
+//            dataImageUrlField: 'icon',
+            dataSource: treeViewdataSource,
+            select: function(e) {
+                win.targetCate = treeview.dataItem(e.node);
+                var id = targetCate.id;
+//                刷新对应分组的单位列表
+                if (id){
+                    splitter.ajaxRequest("#a-pane", "/admin/brand/lists?v=" + Math.random()+"&cateId="+id);
+                }
+            }
+        }).data("kendoTreeView");
+
+//        展开分类
+        treeViewdataSource.read().promise().then(function () {
+            treeview.expand(".k-item");
+        });
+        //工具条
+        $("#a-toolbar-resizable").kendoToolBar({
+            items: [
+                {
+                    type: "buttonGroup", buttons: [
+                    {type: "button", icon: "plus",  click: onAdd},
+                    {type: "button", icon: "pencil",  click: onEdit},
+                    {type: "button", icon: "close",  click: onDelete}
+                ]
+                }, {
+                    type: "button", icon: "refresh", click: onRefresh,attributes: { "class": "pull-right","style" :"position:relative;top:6px;right:-15px" }
+                }
+            ]
+        });
+
+        //新增记录
+        function onAdd() {
+            splitter.ajaxRequest("#a-pane", "/admin/brandCate/add?v=" + Math.random());
+        }
+        //编辑记录
+        function onEdit() {
+            if (targetCate) {
+                if (0 == targetCate.id) {
+                    layer.msg('请选择具体项');
+                } else {
+                    splitter.ajaxRequest("#a-pane", "/admin/brandCate/edit?v=" + Math.random(), {id: targetCate.id});
+                }
+            } else {
+                layer.msg('你需要选择一项');
+            }
+        }
+        //删除记录
+        function onDelete() {
+            var dataItem = treeview.dataItem(treeview.select());
+            if (dataItem) {
+                if (0 == dataItem.id) {
+                    layer.msg('请选择具体项');
+                } else {
+                    layer.confirm('是否删除项?', {icon: 3, title: '提示'}, function (index) {
+                        $.post('/admin/brandCate/removeHandle', 'id=' + dataItem.id, function (obj) {
+                            if (obj.success == 1) {
+                                //从树形菜单中删除对应分类
+                                treeview.remove(treeview.findByText(dataItem.text));
+                            } else {
+                                layer.msg(obj.msg);
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            } else {
+                layer.msg('你需要选择一项');
+            }
+        }
+        //刷新列表
+        function onRefresh(){
+            treeViewdataSource.read().promise().then(function () {
+                treeview.expand(".k-item");
+            });
+        }
+
+    });
+</script>

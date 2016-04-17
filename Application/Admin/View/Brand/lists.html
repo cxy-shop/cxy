@@ -1,0 +1,205 @@
+<div id="a-grid"></div>
+<script>
+    var win = window;
+    //    配置数据源
+    var dataSource = new kendo.data.DataSource({
+        type: 'json',
+        transport: {
+            create: {
+                url: "/admin/brand/addHandle",
+                type: "post"
+            },
+            read: {
+                url: "/admin/brand/getList?cateId=" + '{$cateId}'
+            },
+            update: {
+                url: "/admin/brand/editHandle",
+                type: "post"
+            },
+            destroy: {
+                url: "/admin/brand/removeHandle",
+                type: "post"
+            },
+            //发送数据到服务端前的操作
+            parameterMap: function (data, type) {
+                if (type != 'read') {
+                    data = data.models[0];
+                    data.cateId = '{$cateId}';
+
+                }
+                if (type == "create") {
+                    delete data.id;
+                    return data;
+                }
+                if (type == "destroy") {
+                    return data;
+                }
+                if (type == "update") {
+                    return data;
+                }
+                return {models: data.models};
+            }
+        },
+        batch: true,
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: {
+                        editable: false,
+                        nullable: true,
+                        hidden: true
+                    },
+                    enable: {
+                        type: "boolean",
+                        defaultValue: true
+                    },
+                    recommend: {
+                        type: "boolean",
+                        defaultValue: false
+                    },
+                    logo:{
+                        type:"string",
+                        defaultValue: ''
+                    },
+                    pcImg:{
+                        type:"string",
+                        defaultValue: ''
+                    },
+                    bannerImg:{
+                        type:"string",
+                        defaultValue: ''
+                    }
+                }
+            },
+            data: function (response) {
+                //操作失败,撤销数据源操作
+                if (response.success == 0) {
+                    dataSource.cancelChanges();
+                }
+                return response;
+            }
+        }
+    });
+    //    实例化grid
+    var grid = $("#a-grid").kendoGrid({
+        columns: [
+            {field: "id", hidden: true, editor: false},
+            {title: "logo", field: "logo", template: logoTpl},
+            {title: "名称", field: "name"},
+            {title: "首字母", field: "letter", minScreenWidth: 900},
+            {title: "编码", field: "code", minScreenWidth: 900},
+            {title: "简介", field: "intro", minScreenWidth: 900},
+            {title: "顺序", field: "order", minScreenWidth: 900},
+            {title: "是否推荐", field: "recommend", template: recommendTpl},
+            {title: "是否启用", field: "enable", template: enableTpl},
+            {title: "操作", command: ["edit", "destroy"]}
+        ],
+        dataSource: dataSource,
+        editable: {
+            mode: "popup",
+            template: kendo.template($("#popup-form").html()),
+            confirmation: function (e) {
+                return "你确定要删除" + e.name + "?";
+            }
+        },
+        edit: function (e) {
+            //重新设置弹出窗口宽度并居中
+            var model = e.model,
+                    editWindow = e.container.data("kendoWindow"),
+                    container = editWindow.wrapper.find('.container-fluid'),    //内容区域
+                    windowTitle = editWindow.wrapper.find('.k-window-title'),  //标题区域
+                    _width = 800,//指定窗口宽度
+                    _maxHeight = 500;//指定窗口最大高度
+            editWindow.wrapper.css({width: _width});
+            //修复底部工具栏长度
+            editWindow.wrapper.find('.k-edit-buttons').css({width: (_width - 17)});
+            //修复滚动条
+            container.find('.row').width(editWindow.wrapper.find('.container-fluid').width());
+            container.css({
+                'overflow-x': 'hidden',
+                'max-height': _maxHeight,
+                'padding-right': 0,
+                'padding-left': 0,
+                'width': _width
+            });
+            //修改标题显示
+            if (model.isNew()) {
+                windowTitle.text('新增');
+            } else {
+                windowTitle.text('编辑');
+            }
+            editWindow.center();
+
+            var viewModel = kendo.observable({
+                isEnabled: true,
+                isVisible: true,
+                onSuccess: function (e) {
+                    var files = e.files,
+                            imgObj = e.sender.wrapper.next(),
+                            imgInputObj = imgObj.next();
+                    if (e.operation == "upload") {
+                        if (e.response.success == 1) {
+                            var path = e.response.data[0].path;
+                            imgObj.attr('src', '/Static/tmp/' + path);
+                            model.set(imgInputObj.attr('name'), '/Static/tmp/' + path);
+                        }
+                    } else if (e.operation == "remove") {
+                        //删除缩略图
+                        imgObj.attr('src', '');
+                        //重置上传字段值
+                        model.set(imgInputObj.attr('name'), '');
+                    }
+                },
+                onSelect: function (e) {
+                    $.each(e.files, function (index, value) {
+                        //TODO 检测是否类型,大小是否合法
+//                        console.log("Name: " + value.name);
+//                        console.log("Size: " + value.size + " bytes");
+//                        console.log("Extension: " + value.extension);
+//                        e.preventDefault();
+                    });
+                }
+            });
+            kendo.bind(container.find("#b-logo-div"), viewModel);
+            kendo.bind(container.find("#b-pc-div"), viewModel);
+            kendo.bind(container.find("#b-banner-div"), viewModel);
+        },
+        toolbar: ["create"]
+    }).data('kendoGrid');
+//    显示模版 start
+    function logoTpl(item) {
+        return '<img class="medium-img" src="' + item.logo + '"/>';
+    }
+
+    function enableTpl(item) {
+        if ( item.enable ) {
+            return '启用<input class="a-check" type="checkbox" checked field="enable"/>';
+        } else {
+            return '启用<input class="a-check" type="checkbox" field="enable" />';
+        }
+    }
+    function recommendTpl(item) {
+        if ( item.recommend ) {
+            return '推荐<input class="a-check" type="checkbox" checked field="recommend"/>';
+        } else {
+            return '推荐<input class="a-check" type="checkbox" field="recommend" />';
+        }
+    }
+//    显示模版 end
+//    实现grid行中开启/不开启编辑动作
+    $("#a-grid").on('click', '.a-check', function () {
+        var that = $(this),
+                tr = that.closest('tr'),    //选中元素
+                dataItem = grid.dataItem(tr),   //找到数据源对应数据对象
+                enable,
+                filedName = that.attr('field');
+        dataItem.set( filedName, that.prop('checked'));
+        dataSource.sync();
+        return false;
+    });
+</script>
+
+<include file="Brand/form" />
+
+
