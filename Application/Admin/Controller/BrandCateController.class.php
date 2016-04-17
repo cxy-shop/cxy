@@ -97,15 +97,15 @@ class BrandCateController extends BaseController
     public function combineDataSource($parendId = -1){
         $combineData = [];
         foreach($this->_willCombineList as $item){
-            if (isset($item['parent_id']) && $item['parent_id'] == $parendId){
+            if (isset($item['parentId']) && $item['parentId'] == $parendId){
                 $data = [
                     'text'  =>  $item['name'],
                     'id'    =>  $item['id']
                 ];
                 $childList = $this->combineDataSource($item['id']);
-                $not_empty = !empty($childList);
-                $data['hasChild'] = $not_empty;
-                if ( $not_empty ){
+                $notEmpty = !empty($childList);
+                $data['hasChild'] = $notEmpty;
+                if ( $notEmpty ){
                     $data['items'] = $childList;
                 }
                 $combineData[] = $data;
@@ -123,7 +123,7 @@ class BrandCateController extends BaseController
         $this->_willCombineList = $brandCateService->scope('available')->select();
         $this->_willCombineList[] = [
             'name'  =>  '品牌分类',
-            'parent_id'  => -1,
+            'parentId'  => -1,
             'id'    =>  0
         ];
         $brandList = $this->combineDataSource();
