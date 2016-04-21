@@ -16,10 +16,6 @@ class Menu
                     'url' => '/admin/product/index'
                 ],
                 [
-                    'title' => '商品分类管理',
-                    'url' => '/admin/productCate/index'
-                ],
-                [
                     'title' => '商品单位管理',
                     'url' => '/admin/productUnit/index'
                 ],
