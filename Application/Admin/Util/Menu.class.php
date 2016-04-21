@@ -16,10 +16,6 @@ class Menu
                     'url' => '/admin/product/index'
                 ],
                 [
-                    'title' => '商品单位管理',
-                    'url' => '/admin/productUnit/index'
-                ],
-                [
                     'title' => '品牌管理',
                     'url' => '/admin/brand/index'
                 ],
@@ -28,17 +24,21 @@ class Menu
                     'url' => '/admin/shelf/index'
                 ],
                 [
-                    'title' => '支付方式管理',
-                    'url' => '/admin/payMode/index'
-                ],
-                [
                     'title' => '店面信息管理',
                     'url' => '/admin/store/index'
+                ],
+                [
+                    'title' => '商品单位管理',
+                    'url' => '/admin/productUnit/index'
+                ],
+                [
+                    'title' => '支付方式管理',
+                    'url' => '/admin/payMode/index'
                 ]
             ]
         ],
         [
-            'title' => '网站管理',
+            'title' => '网站模块',
             'iconClass' => 'glyphicon glyphicon-modal-window',
             'items' => [
                 [
@@ -52,11 +52,15 @@ class Menu
                 [
                     'title' => '文章管理',
                     'url' => ''
+                ],
+                [
+                    'title' => '促销规则',
+                    'url' => ''
                 ]
             ]
         ],
         [
-            'title' => '订单管理',
+            'title' => '订单模块',
             'iconClass' => 'glyphicon glyphicon-user',
             'items' => [
                 [
@@ -70,15 +74,15 @@ class Menu
             ]
         ],
         [
-            'title' => '仓库管理',
+            'title' => '仓库模块',
             'iconClass' => 'glyphicon glyphicon-user',
             'items' => [
                 [
-                    'title' => '销售订单管理',
+                    'title' => '仓库盘点',
                     'url' => ''
                 ],
                 [
-                    'title' => '采购订单管理',
+                    'title' => '仓库管理',
                     'url' => ''
                 ]
             ]
@@ -89,16 +93,6 @@ class Menu
             'items' => [
                 [
                     'title' => '会员管理',
-                    'url' => ''
-                ]
-            ]
-        ],
-        [
-            'title' => '网站促销',
-            'iconClass' => 'glyphicon glyphicon-user',
-            'items' => [
-                [
-                    'title' => ' 促销规则',
                     'url' => ''
                 ]
             ]
