@@ -17,7 +17,7 @@ use Admin\Model\BrandModel;
 class BrandController extends BaseController
 {
     /**
-     *  管理主界面
+     * 管理主界面
      */
     public function index()
     {
@@ -29,15 +29,9 @@ class BrandController extends BaseController
     public function remark(){
         $this->display();
     }
-    /**
-     * 介绍页面
-     */
-    public function form(){
-        $this->display();
-    }
 
     /**
-     * 获取列表
+     * 获取列表数据
      */
     public function getList()
     {
@@ -45,8 +39,8 @@ class BrandController extends BaseController
         $page = I('page', 1);   //页码
         $pageSize = I('pageSize', 10);  //页数
         $brandService = new BrandModel();
-        $productUnitList = $brandService->scope('available')->where(['cate_id' => $cateId])->page($page,$pageSize)->select();
-        $total = $brandService->scope('available')->where(['cate_id' => $cateId])->count();
+        $productUnitList = $brandService->scope('available')->category($cateId)->page($page,$pageSize)->select();
+        $total = $brandService->scope('available')->category($cateId)->count();
         $this->ajaxData([
             'data'  =>  $productUnitList,
             'total' =>  $total
