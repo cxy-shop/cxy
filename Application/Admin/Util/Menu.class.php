@@ -104,10 +104,6 @@ class Menu
                 [
                     'title' => ' 促销规则',
                     'url' => ''
-                ],
-                [
-                    'title' => ' 促销活动',
-                    'url' => ''
                 ]
             ]
         ],
@@ -116,7 +112,11 @@ class Menu
             'iconClass' => 'glyphicon glyphicon-user',
             'items' => [
                 [
-                    'title' => ' 投诉建议',
+                    'title' => ' 网站投诉建议',
+                    'url' => ''
+                ],
+                [
+                    'title' => ' 商品评论管理',
                     'url' => ''
                 ]
             ]
