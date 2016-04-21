@@ -41,11 +41,16 @@ class BrandController extends BaseController
      */
     public function getList()
     {
-        $cateId = I('cateId',0);
+        $cateId = I('cateId',0);    //分类ID
+        $page = I('page', 1);   //页码
+        $pageSize = I('pageSize', 10);  //页数
         $brandService = new BrandModel();
-        $productUnitList = $brandService->scope('available')->where(['cate_id' => $cateId])->select();
-
-        $this->ajaxData($productUnitList);
+        $productUnitList = $brandService->scope('available')->where(['cate_id' => $cateId])->page($page,$pageSize)->select();
+        $total = $brandService->scope('available')->where(['cate_id' => $cateId])->count();
+        $this->ajaxData([
+            'data'  =>  $productUnitList,
+            'total' =>  $total
+        ]);
     }
 
     /**
