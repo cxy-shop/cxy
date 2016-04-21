@@ -20,10 +20,6 @@ class Menu
                     'url' => '/admin/productCate/index'
                 ],
                 [
-                    'title' => '商品属性管理',
-                    'url' => '/admin/productAttr/index'
-                ],
-                [
                     'title' => '商品单位管理',
                     'url' => '/admin/productUnit/index'
                 ],
