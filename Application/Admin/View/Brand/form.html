@@ -1,7 +1,7 @@
 <script id="popup-form" type="text/x-kendo-template">
     <div class="container-fluid" style="width:600px;">
         <div class="row">
-            <form id="b-add-form" class="col-md-8 form-horizontal" action="/admin/productCate/addHandle"
+            <form id="b-add-form" class="col-md-8 form-horizontal" action="/admin/brand/addHandle"
                   method="post">
                 <div class="form-group">
                     <label for="b-name" class="col-sm-3 control-label" required>名称</label>
@@ -54,7 +54,7 @@
                 <div class="form-group" id="b-pc-div">
                     <label for="b-pc-file" class="col-sm-3 control-label">pc端图片</label>
                     <div class="col-sm-7">
-                        <input
+        p                <input
                                 class="form-control"
                                 id="b-pc-file"
                                 type="file"
@@ -83,6 +83,12 @@
                               events: { success: onSuccess ,select: onSelect}">
                         <img alt="没有图片" class="big-img" src="#:bannerImg#">
                         <input type="hidden" name="bannerImg">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-order" class="col-sm-3 control-label">排序</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="b-order" name="order">
                     </div>
                 </div>
                 <div class="form-group">
