@@ -103,7 +103,13 @@
         noRecords: {
             template: "还没有记录."
         },
-        columns: [
+        columns: [{
+            field: "rowNumber",
+            title: " ",
+            template: "<span class='row-number'></span>",
+            sortable: false,
+            width:"30px"
+        },
             {field: "id", hidden: true, editor: false},
             {title: "logo", field: "logo", template: logoTpl},
             {title: "名称", field: "name"},
@@ -194,6 +200,17 @@
      * 重置grid高度
      */
     function gridResizeHeight(){
+        //显示行号 start
+        var rows = this.items();
+        var page = this.pager.page() - 1;
+        var pagesize = this.pager.pageSize();
+        $(rows).each(function () {
+            var index = $(this).index() + 1 + page * pagesize;
+            var rowLabel = $(this).find(".row-number");
+            $(rowLabel).html(index);
+        });
+        //显示行号 end
+
         setTimeout(function () {
             var grid = $("#a-grid");
             var paneHeight = Math.floor( $("#a-pane").outerHeight() );
