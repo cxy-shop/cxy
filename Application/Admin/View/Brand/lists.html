@@ -4,6 +4,8 @@
     //    配置数据源
     var dataSource = new kendo.data.DataSource({
         type: 'json',
+        serverPaging: true,
+        pageSize: 10,   //不设置显示条目会显示NaN
         transport: {
             create: {
                 url: "/admin/brand/addHandle",
@@ -21,11 +23,10 @@
                 type: "post"
             },
             //发送数据到服务端前的操作
-            parameterMap: function (data, type) {
+            parameterMap: function (request, type) {
                 if (type != 'read') {
-                    data = data.models[0];
+                    data = request.models[0];
                     data.cateId = '{$cateId}';
-
                 }
                 if (type == "create") {
                     delete data.id;
@@ -37,7 +38,8 @@
                 if (type == "update") {
                     return data;
                 }
-                return {models: data.models};
+                request.cateId = '{$cateId}';
+                return request;
             }
         },
         batch: true,
@@ -69,20 +71,38 @@
                     bannerImg:{
                         type:"string",
                         defaultValue: ''
+                    },
+                    order:{
+                        type:"number",
+                        defaultValue: 0
                     }
                 }
             },
-            data: function (response) {
+            data : function (response) {
                 //操作失败,撤销数据源操作
                 if (response.success == 0) {
                     dataSource.cancelChanges();
                 }
-                return response;
+                return response.data;
+            },
+            total : function (response) {
+                return response.total;
             }
         }
     });
     //    实例化grid
     var grid = $("#a-grid").kendoGrid({
+        resizable: true,
+        sortable: true,
+        scrollable: true,
+        pageable: {
+            refresh: true,
+            pageSizes: true,
+            buttonCount: 5
+        },
+        noRecords: {
+            template: "还没有记录."
+        },
         columns: [
             {field: "id", hidden: true, editor: false},
             {title: "logo", field: "logo", template: logoTpl},
@@ -165,8 +185,25 @@
             kendo.bind(container.find("#b-pc-div"), viewModel);
             kendo.bind(container.find("#b-banner-div"), viewModel);
         },
-        toolbar: ["create"]
+        toolbar: ["create"],
+        dataBound : gridResizeHeight
     }).data('kendoGrid');
+    $(window).resize(gridResizeHeight);
+
+    /**
+     * 重置grid高度
+     */
+    function gridResizeHeight(){
+        setTimeout(function () {
+            var grid = $("#a-grid");
+            var paneHeight = Math.floor( $("#a-pane").outerHeight() );
+            var content = grid.find('.k-grid-content');
+            var toolbarHeight = Math.ceil( grid.find('.k-grid-toolbar').outerHeight() );
+            var headerHeight =  Math.ceil( grid.find('.k-grid-header').outerHeight() );
+            var pagerHeight =  Math.ceil( grid.find('.k-grid-pager').outerHeight() );
+            content.height( paneHeight-toolbarHeight-headerHeight-pagerHeight-2 );
+        }, 0);
+    }
 //    显示模版 start
     function logoTpl(item) {
         return '<img class="medium-img" src="' + item.logo + '"/>';
@@ -193,10 +230,30 @@
                 tr = that.closest('tr'),    //选中元素
                 dataItem = grid.dataItem(tr),   //找到数据源对应数据对象
                 enable,
-                filedName = that.attr('field');
-        dataItem.set( filedName, that.prop('checked'));
-        dataSource.sync();
-        return false;
+                filedName = that.attr('field'),
+                checked = that.prop('checked'),
+                txt = '操作';
+        if( filedName == 'enable' ){
+            if (checked){
+                txt = '启用';
+            }else{
+                txt = '取消启用';
+            }
+        }
+        if( filedName == 'recommend' ){
+            if (checked){
+                txt = '推荐';
+            }else{
+                txt = '取消推荐';
+            }
+        }
+        if(win.confirm('你确定要'+txt+'吗？')){
+            dataItem.set( filedName, checked );
+            dataSource.sync();
+            return true;
+        }else{
+            return false;
+        }
     });
 </script>
 
