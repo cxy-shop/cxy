@@ -1,0 +1,76 @@
+<script id="popup-form" type="text/x-kendo-template">
+    <div class="container-fluid" style="width:600px;">
+        <div class="row">
+            <form id="b-add-form" class="col-md-8 form-horizontal" action="/admin/store/addHandle"
+                  method="post">
+                <div class="form-group">
+                    <label for="b-name" class="col-sm-3 control-label" required>名称</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="b-name" name="name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-code" class="col-sm-3 control-label">编码</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="b-code" name="code">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-status" class="col-sm-3 control-label">经营状态</label>
+                    <div class="col-sm-7">
+                        <input
+                                name="status"
+                                class="form-control"
+                                id="b-status"
+                                data-role="dropdownlist"
+                                data-value-primitive="true"
+                                data-text-field="statusName"
+                                data-value-field="statusId"
+                                data-bind="
+                              source: statusList,
+                              visible: isVisible,
+                              enabled: isEnabled,
+                              events: {
+                                change: onChange,
+                                select:onSelect,
+                                open: onOpen,
+                                close: onClose
+                              }"
+                        />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-address" class="col-sm-3 control-label">地址</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="b-address" name="address">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-phone" class="col-sm-3 control-label">联系电话</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="b-phone" name="phone">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-fax" class="col-sm-3 control-label">传真</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" id="b-fax" name="fax">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="b-remark" class="col-sm-3 control-label">简介</label>
+                    <div class="col-sm-7">
+                        <textarea id="b-remark" class="form-control" name="remark"
+                                  style="width:250px;height: 120px;"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-7">
+                        <input type="hidden" name="id">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</script>
