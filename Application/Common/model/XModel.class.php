@@ -15,6 +15,11 @@ namespace Common\Model;
 use Admin\Model\UserModel;
 use Think\Model;
 
+/**
+ * 增强tp框架Model
+ * Class XModel
+ * @package Common\Model
+ */
 class XModel extends Model
 {
     /**
@@ -35,6 +40,26 @@ class XModel extends Model
         return date("Y-m-d H:i:s", time());
     }
 
+    /**
+     * 转成字符串
+     * @param $value
+     * @return string
+     */
+    public function toString($value){
+        return strval($value);
+    }
+    /**
+     * 分类筛选封装
+     * @param int $id 分类ID
+     * @param string $cateField 分类表字段
+     * @return $this
+     */
+    public function category($id = 0, $cateField = 'cate_id'){
+        if($id){
+            $this->where([$cateField => $id]);
+        }
+        return $this;
+    }
     /**
      * 丢入回收站或者删除记录
      * 如果没有删除就丢入回收站

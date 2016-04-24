@@ -38,8 +38,4 @@ class BrandModel extends XModel
     protected $_scope = [
         'available' =>  []
     ];
-
-    public function toString($value){
-        return strval($value);
-    }
 }
